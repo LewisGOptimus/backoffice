@@ -1,6 +1,6 @@
 ﻿import { redirect } from "next/navigation";
 
-export default function Home() {
+export default function CasosPage() {
   redirect("/backoffice");
 }
 

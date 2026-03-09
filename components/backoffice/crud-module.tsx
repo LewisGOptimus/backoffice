@@ -144,18 +144,18 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
   };
 
   return (
-    <section className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <section className="space-y-3 rounded-2xl border border-slate-200 bg-white w-full p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
         <button onClick={openCreate} className="rounded bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white">Nuevo</button>
       </div>
       <div className="max-h-[620px] overflow-auto rounded border border-slate-200">
         <table className="min-w-full text-xs">
-          <thead className="bg-slate-50">
+          <thead className="bg-[var(--color-primary-500)]">
             <tr>
-              <th className="px-2 py-2 text-left text-slate-600">#</th>
-              {columns.map((c) => <th key={c.key} className="px-2 py-2 text-left text-slate-600">{c.label}</th>)}
-              <th className="px-2 py-2 text-left text-slate-600">Acciones</th>
+              <th className="px-2 py-2 text-left text-white ">#</th>
+              {columns.map((c) => <th key={c.key} className="px-2 py-2 text-left text-white">{c.label}</th>)}
+              <th className="px-2 py-2 text-left text-white">Acciones</th>
             </tr>
           </thead>
           <tbody>

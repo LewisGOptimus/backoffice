@@ -70,11 +70,11 @@ function addPeriod(dateIso: string, periodo: string) { const d = new Date(`${dat
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
-      <div className="w-full max-w-4xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1E293B]/50 p-4">
+      <div className="w-full max-w-4xl rounded-[20px] border border-[#E2E8F0] bg-white p-6 shadow-(--shadow-medium)">
         <div className="mb-3 flex items-center justify-between">
-          <h4 className="text-base font-semibold text-slate-900">{title}</h4>
-          <button onClick={onClose} className="rounded border border-slate-300 px-2 py-1 text-xs text-slate-700">Cerrar</button>
+          <h4 className="text-base font-semibold text-[#1E293B]">{title}</h4>
+          <button onClick={onClose} className="rounded border border-[#E2E8F0] px-2 py-1 text-xs text-[#64748B]">Cerrar</button>
         </div>
         {children}
       </div>
@@ -337,67 +337,67 @@ export function AdminDashboard() {
   }, [suscripciones, facturas, companyNameById, planNameById]);
 
   return (
-    <main className="space-y-4">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-2xl font-semibold text-slate-900">Dashboard Administrativo</h2>
-        <p className="text-sm text-slate-600">Operacion de suscripciones y catalogo.</p>
+    <main className="space-y-5">
+      <section className="rounded-[16px] border border-[#E2E8F0] bg-white p-5 shadow-(--shadow-soft)">
+        <h2 className="text-2xl font-semibold text-[#1E293B]">Dashboard Administrativo</h2>
+        <p className="text-sm text-[#64748B]">Operacion de suscripciones y catalogo.</p>
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[260px_1fr]">
+      <section className="grid gap-5 xl:grid-cols-[260px_1fr]">
         <aside className="space-y-4">
-          <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Entidades</p>
+          <article className="rounded-[16px] border border-[#E2E8F0] bg-white p-5 shadow-(--shadow-soft)">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#64748B]">Entidades</p>
               <div className="space-y-1.5">
                 {ENTITIES.map((e) => (
-                <button key={e.key} onClick={() => navigateTo({ kind: "entity", key: e.key })} className={`w-full rounded-lg border px-3 py-2 text-left text-xs ${view.kind === "entity" && view.key === e.key ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"}`}>{e.label}</button>
+                <button key={e.key} onClick={() => navigateTo({ kind: "entity", key: e.key })} className={`w-full rounded-[10px] border px-3 py-2 text-left text-xs transition-colors ${view.kind === "entity" && view.key === e.key ? "border-[#2563EB] bg-[#2563EB] text-white" : "border-[#E2E8F0] bg-white text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#1E293B]"}`}>{e.label}</button>
               ))}
             </div>
           </article>
 
-          <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Negocio</p>
-            <button onClick={() => navigateTo({ kind: "overview" })} className={`w-full rounded-lg border px-3 py-2 text-left text-xs ${view.kind === "overview" ? "border-teal-800 bg-teal-800 text-white" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"}`}>Empresas y contratos</button>
+          <article className="rounded-[16px] border border-[#E2E8F0] bg-white p-5 shadow-(--shadow-soft)">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#64748B]">Negocio</p>
+            <button onClick={() => navigateTo({ kind: "overview" })} className={`w-full rounded-[10px] border px-3 py-2 text-left text-xs transition-colors ${view.kind === "overview" ? "border-[#2563EB] bg-[#2563EB] text-white" : "border-[#E2E8F0] bg-white text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#1E293B]"}`}>Empresas y contratos</button>
           </article>
 
-          <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Tecnico</p>
+          <article className="rounded-[16px] border border-[#E2E8F0] bg-white p-5 shadow-(--shadow-soft)">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#64748B]">Tecnico</p>
             <div className="space-y-1.5">
-              <button onClick={() => navigateTo({ kind: "technical", tab: "cases" })} className={`w-full rounded-lg border px-3 py-2 text-left text-xs ${view.kind === "technical" && view.tab === "cases" ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"}`}>Casos guiados</button>
-              <button onClick={() => navigateTo({ kind: "technical", tab: "diagnostics" })} className={`w-full rounded-lg border px-3 py-2 text-left text-xs ${view.kind === "technical" && view.tab === "diagnostics" ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"}`}>Diagnostico</button>
+              <button onClick={() => navigateTo({ kind: "technical", tab: "cases" })} className={`w-full rounded-[10px] border px-3 py-2 text-left text-xs transition-colors ${view.kind === "technical" && view.tab === "cases" ? "border-[#2563EB] bg-[#2563EB] text-white" : "border-[#E2E8F0] bg-white text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#1E293B]"}`}>Casos guiados</button>
+              <button onClick={() => navigateTo({ kind: "technical", tab: "diagnostics" })} className={`w-full rounded-[10px] border px-3 py-2 text-left text-xs transition-colors ${view.kind === "technical" && view.tab === "diagnostics" ? "border-[#2563EB] bg-[#2563EB] text-white" : "border-[#E2E8F0] bg-white text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#1E293B]"}`}>Diagnostico</button>
             </div>
           </article>
         </aside>
 
-        <section className="space-y-4">
-          <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <h3 className="text-sm font-semibold text-slate-900">Preparar entorno</h3>
+        <section className="space-y-5">
+          <article className="rounded-[16px] bg-white p-5 shadow-(--shadow-soft)">
+            <h3 className="text-sm font-semibold text-[#1E293B]">Preparar entorno</h3>
             <div className="mt-2 flex gap-2">
-              <input value={seedKey} onChange={(e) => setSeedKey(e.target.value)} placeholder="DEV_SEED_KEY" className="min-w-[240px] rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm" />
-              <button onClick={runSeed} className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white">Ejecutar seed</button>
+              <input value={seedKey} onChange={(e) => setSeedKey(e.target.value)} placeholder="DEV_SEED_KEY" className="min-w-[240px] rounded-[10px] border border-[#E2E8F0] bg-white px-3 py-2 text-sm text-[#1E293B] placeholder:text-[#64748B] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]" />
+              <button onClick={runSeed} className="rounded-[10px] bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1D4ED8]">Ejecutar seed</button>
             </div>
-            <p className="mt-2 text-sm text-slate-600">{seedMsg}</p>
+            <p className="mt-2 text-sm text-[#64748B]">{seedMsg}</p>
           </article>
 
           {view.kind === "entity" && (
-            <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <article className="rounded-[16px] bg-white p-5 shadow-(--shadow-soft)">
               <div className="mb-3 flex items-center justify-between gap-3">
-                <div><h3 className="text-lg font-semibold text-slate-900">{entity.label}</h3><p className="text-sm text-slate-600">{entity.description}</p></div>
-                {entity.mutable && <button onClick={openCreateModal} className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-semibold text-white">Nuevo</button>}
+                <div><h3 className="text-lg font-semibold text-[#1E293B]">{entity.label}</h3><p className="text-sm text-[#64748B]">{entity.description}</p></div>
+                {entity.mutable && <button onClick={openCreateModal} className="rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white">Nuevo</button>}
               </div>
-              <div className="mb-2 flex items-center justify-between"><p className="text-sm font-semibold text-slate-800">Listado ({rows.length})</p><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Filtrar..." className="w-52 rounded border border-slate-300 px-2 py-1.5 text-xs" /></div>
-              <div className="max-h-[560px] overflow-auto rounded border border-slate-200">
+              <div className="mb-2 flex items-center justify-between"><p className="text-sm font-semibold text-[#1E293B]">Listado ({rows.length})</p><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Filtrar..." className="w-52 rounded border border-[#E2E8F0] px-2 py-1.5 text-xs" /></div>
+              <div className="max-h-[560px] overflow-auto rounded border border-[#E2E8F0]">
                 <table className="min-w-full text-xs">
-                  <thead className="bg-slate-50"><tr>{entity.columns.map((c) => <th key={c.key} className="px-2 py-2 text-left text-slate-600">{c.label}</th>)}<th className="px-2 py-2 text-left text-slate-600">Acciones</th></tr></thead>
+                  <thead className="bg-[#F8FAFC]"><tr>{entity.columns.map((c) => <th key={c.key} className="px-2 py-2 text-left text-[#64748B]">{c.label}</th>)}<th className="px-2 py-2 text-left text-[#64748B]">Acciones</th></tr></thead>
                   <tbody>
                     {filteredRows.map((r, idx) => (
-                      <tr key={`${asText(r.id)}-${idx}`} className="border-t border-slate-100">
-                        {entity.columns.map((c) => <td key={c.key} className="px-2 py-2 text-slate-700">{renderCell(c.key, r[c.key])}</td>)}
+                      <tr key={`${asText(r.id)}-${idx}`} className="border-t border-[#F1F5F9]">
+                        {entity.columns.map((c) => <td key={c.key} className="px-2 py-2 text-[#64748B]">{renderCell(c.key, r[c.key])}</td>)}
                         <td className="px-2 py-2">
                           <div className="flex gap-1.5">
-                            {entity.mutable && <button onClick={() => beginEdit(r)} className="rounded bg-slate-900 px-2 py-1 text-[11px] text-white">Editar</button>}
+                            {entity.mutable && <button onClick={() => beginEdit(r)} className="rounded bg-[#2563EB] px-2 py-1 text-[11px] text-white">Editar</button>}
                             {entity.mutable && <button onClick={() => removeRow(r)} className="rounded bg-rose-700 px-2 py-1 text-[11px] text-white">Eliminar</button>}
                             {entity.key === "planes" && r.id && <button onClick={() => setSelectedPlanId(String(r.id))} className="rounded bg-indigo-700 px-2 py-1 text-[11px] text-white">Composicion</button>}
-                            {entity.key === "suscripciones" && r.id && <button onClick={() => setSelectedSubscriptionId(String(r.id))} className="rounded bg-teal-700 px-2 py-1 text-[11px] text-white">Seleccionar</button>}
+                            {entity.key === "suscripciones" && r.id && <button onClick={() => setSelectedSubscriptionId(String(r.id))} className="rounded bg-[#2563EB] px-2 py-1 text-[11px] text-white">Seleccionar</button>}
                           </div>
                         </td>
                       </tr>
@@ -407,25 +407,25 @@ export function AdminDashboard() {
               </div>
 
               {entity.key === "planes" && selectedPlanId && (
-                <div className="mt-4 rounded-xl border border-slate-200 p-3">
-                  <p className="text-sm font-semibold text-slate-900">Composicion del plan</p>
-                  <p className="mb-2 text-xs text-slate-600">{planNameById.get(selectedPlanId) ?? selectedPlanId}</p>
-                  <div className="max-h-60 overflow-auto rounded border border-slate-200">
+                <div className="mt-4 rounded-xl border border-[#E2E8F0] p-3">
+                  <p className="text-sm font-semibold text-[#1E293B]">Composicion del plan</p>
+                  <p className="mb-2 text-xs text-[#64748B]">{planNameById.get(selectedPlanId) ?? selectedPlanId}</p>
+                  <div className="max-h-60 overflow-auto rounded border border-[#E2E8F0]">
                     <table className="min-w-full text-xs">
-                      <thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left text-slate-600">Producto</th><th className="px-2 py-2 text-left text-slate-600">Incluido</th><th className="px-2 py-2 text-left text-slate-600">Cantidad</th></tr></thead>
-                      <tbody>{itemsPlan.filter((x) => String(x.plan_id) === selectedPlanId).map((x) => <tr key={`${asText(x.plan_id)}-${asText(x.producto_id)}`} className="border-t border-slate-100"><td className="px-2 py-2 text-slate-700">{productNameById.get(String(x.producto_id)) ?? asText(x.producto_id)}</td><td className="px-2 py-2 text-slate-700">{asText(x.incluido)}</td><td className="px-2 py-2 text-slate-700">{asText(x.cantidad)}</td></tr>)}</tbody>
+                      <thead className="bg-[#F8FAFC]"><tr><th className="px-2 py-2 text-left text-[#64748B]">Producto</th><th className="px-2 py-2 text-left text-[#64748B]">Incluido</th><th className="px-2 py-2 text-left text-[#64748B]">Cantidad</th></tr></thead>
+                      <tbody>{itemsPlan.filter((x) => String(x.plan_id) === selectedPlanId).map((x) => <tr key={`${asText(x.plan_id)}-${asText(x.producto_id)}`} className="border-t border-[#F1F5F9]"><td className="px-2 py-2 text-[#64748B]">{productNameById.get(String(x.producto_id)) ?? asText(x.producto_id)}</td><td className="px-2 py-2 text-[#64748B]">{asText(x.incluido)}</td><td className="px-2 py-2 text-[#64748B]">{asText(x.cantidad)}</td></tr>)}</tbody>
                     </table>
                   </div>
                 </div>
               )}
 
               {entity.key === "suscripciones" && selectedSubscriptionId && (
-                <div className="mt-4 rounded-xl border border-slate-200 p-3">
-                  <p className="text-sm font-semibold text-slate-900">Items de suscripcion seleccionada</p>
-                  <div className="max-h-60 overflow-auto rounded border border-slate-200">
+                <div className="mt-4 rounded-xl border border-[#E2E8F0] p-3">
+                  <p className="text-sm font-semibold text-[#1E293B]">Items de suscripcion seleccionada</p>
+                  <div className="max-h-60 overflow-auto rounded border border-[#E2E8F0]">
                     <table className="min-w-full text-xs">
-                      <thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left text-slate-600">Producto</th><th className="px-2 py-2 text-left text-slate-600">Cantidad</th><th className="px-2 py-2 text-left text-slate-600">Origen</th><th className="px-2 py-2 text-left text-slate-600">Estado</th></tr></thead>
-                      <tbody>{itemsSuscripcion.filter((x) => String(x.suscripcion_id) === selectedSubscriptionId).map((x) => <tr key={asText(x.id)} className="border-t border-slate-100"><td className="px-2 py-2 text-slate-700">{productNameById.get(String(x.producto_id)) ?? asText(x.producto_id)}</td><td className="px-2 py-2 text-slate-700">{asText(x.cantidad)}</td><td className="px-2 py-2 text-slate-700">{asText(x.origen)}</td><td className="px-2 py-2 text-slate-700">{asText(x.estado)}</td></tr>)}</tbody>
+                      <thead className="bg-[#F8FAFC]"><tr><th className="px-2 py-2 text-left text-[#64748B]">Producto</th><th className="px-2 py-2 text-left text-[#64748B]">Cantidad</th><th className="px-2 py-2 text-left text-[#64748B]">Origen</th><th className="px-2 py-2 text-left text-[#64748B]">Estado</th></tr></thead>
+                      <tbody>{itemsSuscripcion.filter((x) => String(x.suscripcion_id) === selectedSubscriptionId).map((x) => <tr key={asText(x.id)} className="border-t border-[#F1F5F9]"><td className="px-2 py-2 text-[#64748B]">{productNameById.get(String(x.producto_id)) ?? asText(x.producto_id)}</td><td className="px-2 py-2 text-[#64748B]">{asText(x.cantidad)}</td><td className="px-2 py-2 text-[#64748B]">{asText(x.origen)}</td><td className="px-2 py-2 text-[#64748B]">{asText(x.estado)}</td></tr>)}</tbody>
                     </table>
                   </div>
                 </div>
@@ -436,32 +436,32 @@ export function AdminDashboard() {
           {view.kind === "overview" && (
             <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {overviewCards.map((c) => (
-                <article key={c.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <p className="text-xs uppercase tracking-wide text-slate-500">Empresa</p>
-                  <p className="text-sm font-semibold text-slate-900">{c.empresa}</p>
-                  <p className="mt-2 text-xs uppercase tracking-wide text-slate-500">Plan contratado</p>
-                  <p className="text-sm text-slate-800">{c.plan}</p>
-                  <p className="mt-2 text-xs uppercase tracking-wide text-slate-500">Suscripcion</p>
-                  <p className="text-xs text-slate-700">{c.id}</p>
-                  <p className="mt-2 text-xs uppercase tracking-wide text-slate-500">Facturas asociadas</p>
-                  <p className="text-sm text-slate-800">{c.facturas}</p>
-                  <p className="mt-2 text-xs text-slate-500">Estado: {c.estado}</p>
+                <article key={c.id} className="rounded-[16px] border border-[#E2E8F0] bg-white p-5 shadow-(--shadow-soft)">
+                  <p className="text-xs uppercase tracking-wide text-[#64748B]">Empresa</p>
+                  <p className="text-sm font-semibold text-[#1E293B]">{c.empresa}</p>
+                  <p className="mt-2 text-xs uppercase tracking-wide text-[#64748B]">Plan contratado</p>
+                  <p className="text-sm text-[#1E293B]">{c.plan}</p>
+                  <p className="mt-2 text-xs uppercase tracking-wide text-[#64748B]">Suscripcion</p>
+                  <p className="text-xs text-[#64748B]">{c.id}</p>
+                  <p className="mt-2 text-xs uppercase tracking-wide text-[#64748B]">Facturas asociadas</p>
+                  <p className="text-sm text-[#1E293B]">{c.facturas}</p>
+                  <p className="mt-2 text-xs text-[#64748B]">Estado: {c.estado}</p>
                 </article>
               ))}
             </section>
           )}
 
           {view.kind === "technical" && view.tab === "cases" && (
-            <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-              <h3 className="text-lg font-semibold text-slate-900">Casos guiados</h3>
+            <article className="rounded-[16px] border border-[#E2E8F0] bg-white p-5 shadow-(--shadow-soft)">
+              <h3 className="text-lg font-semibold text-[#1E293B]">Casos guiados</h3>
               <div className="mt-3 space-y-3">
                 {CASES.map((c) => (
-                  <div key={c.id} className="rounded-xl border border-slate-200 p-3">
-                    <p className="text-sm font-semibold text-slate-900">Caso {c.caso}: {c.title}</p>
+                  <div key={c.id} className="rounded-xl border border-[#E2E8F0] p-3">
+                    <p className="text-sm font-semibold text-[#1E293B]">Caso {c.caso}: {c.title}</p>
                     <div className="mt-2 grid gap-2 md:grid-cols-2">
-                      {c.fields.map((f) => <label key={`${c.id}-${f.name}`} className="text-xs text-slate-700">{f.label}<input value={caseForms[c.id][f.name] ?? ""} onChange={(e) => setCaseForms((p) => ({ ...p, [c.id]: { ...p[c.id], [f.name]: e.target.value } }))} type={f.type ?? "text"} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>)}
+                      {c.fields.map((f) => <label key={`${c.id}-${f.name}`} className="text-xs text-[#64748B]">{f.label}<input value={caseForms[c.id][f.name] ?? ""} onChange={(e) => setCaseForms((p) => ({ ...p, [c.id]: { ...p[c.id], [f.name]: e.target.value } }))} type={f.type ?? "text"} className="mt-1 w-full rounded border border-[#E2E8F0] px-2 py-1.5" /></label>)}
                     </div>
-                    <button onClick={() => runCase(c.id)} className="mt-2 rounded bg-teal-700 px-3 py-1.5 text-xs font-semibold text-white">Ejecutar</button>
+                    <button onClick={() => runCase(c.id)} className="mt-2 rounded bg-[#2563EB] px-3 py-1.5 text-xs font-semibold text-white">Ejecutar</button>
                   </div>
                 ))}
               </div>
@@ -469,12 +469,12 @@ export function AdminDashboard() {
           )}
 
           {view.kind === "technical" && view.tab === "diagnostics" && (
-            <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-              <h3 className="text-lg font-semibold text-slate-900">Diagnostico</h3>
-              <p className="mt-2 text-sm text-slate-700">Estado API: {health.api} | DB: {health.db}</p>
-              <p className="mt-2 text-sm text-slate-700">{message}</p>
-              <details className="mt-3"><summary className="cursor-pointer text-xs text-slate-600">Salida tecnica</summary><pre className="mt-2 max-h-64 overflow-auto rounded border border-slate-200 bg-slate-50 p-2 text-xs text-slate-700">{output ? JSON.stringify(output, null, 2) : "Sin salida"}</pre></details>
-              <ul className="mt-3 space-y-2">{history.slice(0, 8).map((h) => <li key={h.id} className="rounded border border-slate-200 bg-slate-50 p-2 text-xs"><p className="font-semibold text-slate-800">{h.title}</p><p className="text-slate-500">{h.endpoint}</p></li>)}</ul>
+            <article className="rounded-[16px] border border-[#E2E8F0] bg-white p-5 shadow-(--shadow-soft)">
+              <h3 className="text-lg font-semibold text-[#1E293B]">Diagnostico</h3>
+              <p className="mt-2 text-sm text-[#64748B]">Estado API: {health.api} | DB: {health.db}</p>
+              <p className="mt-2 text-sm text-[#64748B]">{message}</p>
+              <details className="mt-3"><summary className="cursor-pointer text-xs text-[#64748B]">Salida tecnica</summary><pre className="mt-2 max-h-64 overflow-auto rounded border border-[#E2E8F0] bg-[#F8FAFC] p-2 text-xs text-[#64748B]">{output ? JSON.stringify(output, null, 2) : "Sin salida"}</pre></details>
+              <ul className="mt-3 space-y-2">{history.slice(0, 8).map((h) => <li key={h.id} className="rounded border border-[#E2E8F0] bg-[#F8FAFC] p-2 text-xs"><p className="font-semibold text-[#1E293B]">{h.title}</p><p className="text-[#64748B]">{h.endpoint}</p></li>)}</ul>
             </article>
           )}
         </section>
@@ -485,32 +485,32 @@ export function AdminDashboard() {
           {entity.key === "suscripciones" && formMode === "create" ? (
             <div className="space-y-3">
               <div className="grid gap-2 md:grid-cols-2">
-                <label className="text-xs text-slate-700">Empresa<select value={wizard.empresaId} onChange={(e) => setWizard((p) => ({ ...p, empresaId: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Seleccionar...</option>{empresas.map((e) => <option key={String(e.id)} value={String(e.id)}>{asText(e.nombre)}</option>)}</select></label>
-                <label className="text-xs text-slate-700">Plan<select value={wizard.planId} onChange={(e) => { const planId = e.target.value; setWizard((p) => ({ ...p, planId, precioPlanId: selectFirstEligiblePrice(planId, p.fechaInicio) })); }} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Seleccionar...</option>{planes.map((p) => <option key={String(p.id)} value={String(p.id)}>{asText(p.nombre)} ({asText(p.periodo)})</option>)}</select></label>
-                <label className="text-xs text-slate-700">Fecha inicio<input type="date" value={wizard.fechaInicio} onChange={(e) => { const fechaInicio = e.target.value; setWizard((p) => ({ ...p, fechaInicio, precioPlanId: p.planId ? selectFirstEligiblePrice(p.planId, fechaInicio) : "" })); }} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-                <label className="text-xs text-slate-700">Precio vigente<select value={wizard.precioPlanId} onChange={(e) => setWizard((p) => ({ ...p, precioPlanId: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Seleccionar...</option>{eligiblePrices.map((pp) => <option key={String(pp.id)} value={String(pp.id)}>{asText(pp.periodo)} | {formatMoney(pp.valor)}</option>)}</select></label>
+                <label className="text-xs text-[#64748B]">Empresa<select value={wizard.empresaId} onChange={(e) => setWizard((p) => ({ ...p, empresaId: e.target.value }))} className="mt-1 w-full rounded border border-[#E2E8F0] px-2 py-1.5"><option value="">Seleccionar...</option>{empresas.map((e) => <option key={String(e.id)} value={String(e.id)}>{asText(e.nombre)}</option>)}</select></label>
+                <label className="text-xs text-[#64748B]">Plan<select value={wizard.planId} onChange={(e) => { const planId = e.target.value; setWizard((p) => ({ ...p, planId, precioPlanId: selectFirstEligiblePrice(planId, p.fechaInicio) })); }} className="mt-1 w-full rounded border border-[#E2E8F0] px-2 py-1.5"><option value="">Seleccionar...</option>{planes.map((p) => <option key={String(p.id)} value={String(p.id)}>{asText(p.nombre)} ({asText(p.periodo)})</option>)}</select></label>
+                <label className="text-xs text-[#64748B]">Fecha inicio<input type="date" value={wizard.fechaInicio} onChange={(e) => { const fechaInicio = e.target.value; setWizard((p) => ({ ...p, fechaInicio, precioPlanId: p.planId ? selectFirstEligiblePrice(p.planId, fechaInicio) : "" })); }} className="mt-1 w-full rounded border border-[#E2E8F0] px-2 py-1.5" /></label>
+                <label className="text-xs text-[#64748B]">Precio vigente<select value={wizard.precioPlanId} onChange={(e) => setWizard((p) => ({ ...p, precioPlanId: e.target.value }))} className="mt-1 w-full rounded border border-[#E2E8F0] px-2 py-1.5"><option value="">Seleccionar...</option>{eligiblePrices.map((pp) => <option key={String(pp.id)} value={String(pp.id)}>{asText(pp.periodo)} | {formatMoney(pp.valor)}</option>)}</select></label>
               </div>
-              <div className="rounded border border-slate-200 bg-slate-50 p-2 text-xs text-slate-700">Productos incluidos del plan: {selectedPlanIncludedItems.length}</div>
-              <div className="flex justify-end gap-2"><button onClick={() => setIsCrudModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button><button onClick={createSubscriptionWizard} className="rounded bg-teal-700 px-4 py-2 text-sm font-semibold text-white">Crear suscripcion</button></div>
+              <div className="rounded border border-[#E2E8F0] bg-[#F8FAFC] p-2 text-xs text-[#64748B]">Productos incluidos del plan: {selectedPlanIncludedItems.length}</div>
+              <div className="flex justify-end gap-2"><button onClick={() => setIsCrudModalOpen(false)} className="rounded border border-[#E2E8F0] px-3 py-2 text-sm">Cancelar</button><button onClick={createSubscriptionWizard} className="rounded bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white">Crear suscripcion</button></div>
             </div>
           ) : entity.key === "planes" ? (
             <div className="space-y-3">
               <div className="grid gap-2 md:grid-cols-2">
                 {entity.fields.map((f) => (
-                  <label key={f.key} className="text-xs text-slate-700">{f.label}{f.type === "select" ? <select value={entityForms[entity.key]?.[f.key] ?? ""} onChange={(e) => setEntityForms((p) => ({ ...p, [entity.key]: { ...p[entity.key], [f.key]: e.target.value } }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Seleccionar...</option>{(f.options ?? []).map((o) => <option key={o} value={o}>{o}</option>)}</select> : <input value={entityForms[entity.key]?.[f.key] ?? ""} onChange={(e) => setEntityForms((p) => ({ ...p, [entity.key]: { ...p[entity.key], [f.key]: e.target.value } }))} type={f.type ?? "text"} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" />}</label>
+                  <label key={f.key} className="text-xs text-[#64748B]">{f.label}{f.type === "select" ? <select value={entityForms[entity.key]?.[f.key] ?? ""} onChange={(e) => setEntityForms((p) => ({ ...p, [entity.key]: { ...p[entity.key], [f.key]: e.target.value } }))} className="mt-1 w-full rounded border border-[#E2E8F0] px-2 py-1.5"><option value="">Seleccionar...</option>{(f.options ?? []).map((o) => <option key={o} value={o}>{o}</option>)}</select> : <input value={entityForms[entity.key]?.[f.key] ?? ""} onChange={(e) => setEntityForms((p) => ({ ...p, [entity.key]: { ...p[entity.key], [f.key]: e.target.value } }))} type={f.type ?? "text"} className="mt-1 w-full rounded border border-[#E2E8F0] px-2 py-1.5" />}</label>
                 ))}
               </div>
-              <div className="rounded border border-slate-200 p-3">
-                <p className="text-xs font-semibold text-slate-800">Productos del plan (obligatorio)</p>
+              <div className="rounded border border-[#E2E8F0] p-3">
+                <p className="text-xs font-semibold text-[#1E293B]">Productos del plan (obligatorio)</p>
                 <div className="mt-2 grid gap-2 md:grid-cols-4">
-                  <select value={draftProduct} onChange={(e) => setDraftProduct(e.target.value)} className="rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="">Producto...</option>{productos.map((p) => <option key={String(p.id)} value={String(p.id)}>{asText(p.nombre)} ({asText(p.codigo)})</option>)}</select>
-                  <input value={draftCantidad} onChange={(e) => setDraftCantidad(e.target.value)} type="number" min="0" placeholder="Cantidad" className="rounded border border-slate-300 px-2 py-1.5 text-xs" />
-                  <select value={draftIncluido} onChange={(e) => setDraftIncluido(e.target.value)} className="rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="true">Incluido</option><option value="false">No incluido</option></select>
-                  <button onClick={addDraftItem} className="rounded bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white">Agregar</button>
+                  <select value={draftProduct} onChange={(e) => setDraftProduct(e.target.value)} className="rounded border border-[#E2E8F0] px-2 py-1.5 text-xs"><option value="">Producto...</option>{productos.map((p) => <option key={String(p.id)} value={String(p.id)}>{asText(p.nombre)} ({asText(p.codigo)})</option>)}</select>
+                  <input value={draftCantidad} onChange={(e) => setDraftCantidad(e.target.value)} type="number" min="0" placeholder="Cantidad" className="rounded border border-[#E2E8F0] px-2 py-1.5 text-xs" />
+                  <select value={draftIncluido} onChange={(e) => setDraftIncluido(e.target.value)} className="rounded border border-[#E2E8F0] px-2 py-1.5 text-xs"><option value="true">Incluido</option><option value="false">No incluido</option></select>
+                  <button onClick={addDraftItem} className="rounded bg-[#2563EB] px-3 py-1.5 text-xs font-semibold text-white">Agregar</button>
                 </div>
-                <ul className="mt-2 space-y-1 text-xs text-slate-700">{planDraftItems.map((i) => <li key={i.productoId} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{productNameById.get(i.productoId) ?? i.productoId} | cantidad: {i.cantidad || "-"} | {i.incluido ? "incluido" : "no incluido"}</span><button onClick={() => setPlanDraftItems((p) => p.filter((x) => x.productoId !== i.productoId))} className="rounded bg-rose-700 px-2 py-0.5 text-[11px] text-white">Quitar</button></li>)}</ul>
+                <ul className="mt-2 space-y-1 text-xs text-[#64748B]">{planDraftItems.map((i) => <li key={i.productoId} className="flex items-center justify-between rounded border border-[#E2E8F0] px-2 py-1"><span>{productNameById.get(i.productoId) ?? i.productoId} | cantidad: {i.cantidad || "-"} | {i.incluido ? "incluido" : "no incluido"}</span><button onClick={() => setPlanDraftItems((p) => p.filter((x) => x.productoId !== i.productoId))} className="rounded bg-rose-700 px-2 py-0.5 text-[11px] text-white">Quitar</button></li>)}</ul>
               </div>
-              <div className="flex justify-end gap-2"><button onClick={() => setIsCrudModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button><button onClick={saveEntity} className="rounded bg-teal-700 px-4 py-2 text-sm font-semibold text-white">{formMode === "create" ? "Guardar plan" : "Actualizar plan"}</button></div>
+              <div className="flex justify-end gap-2"><button onClick={() => setIsCrudModalOpen(false)} className="rounded border border-[#E2E8F0] px-3 py-2 text-sm">Cancelar</button><button onClick={saveEntity} className="rounded bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white">{formMode === "create" ? "Guardar plan" : "Actualizar plan"}</button></div>
             </div>
           ) : (
             <div className="space-y-3">
@@ -519,10 +519,10 @@ export function AdminDashboard() {
                   const rel = fieldOptions(f.key);
                   const options = f.type === "select" ? (f.options ?? []) : rel.map((x) => x.value);
                   const relLabels = new Map(rel.map((x) => [x.value, x.label]));
-                  return <label key={f.key} className="text-xs text-slate-700">{f.label}{(f.type === "select" || rel.length > 0) ? <select value={entityForms[entity.key]?.[f.key] ?? ""} onChange={(e) => setEntityForms((p) => ({ ...p, [entity.key]: { ...p[entity.key], [f.key]: e.target.value } }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Seleccionar...</option>{options.map((o) => <option key={o} value={o}>{relLabels.get(o) ?? o}</option>)}</select> : <input value={entityForms[entity.key]?.[f.key] ?? ""} onChange={(e) => setEntityForms((p) => ({ ...p, [entity.key]: { ...p[entity.key], [f.key]: e.target.value } }))} type={f.type ?? "text"} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" />}</label>;
+                  return <label key={f.key} className="text-xs text-[#64748B]">{f.label}{(f.type === "select" || rel.length > 0) ? <select value={entityForms[entity.key]?.[f.key] ?? ""} onChange={(e) => setEntityForms((p) => ({ ...p, [entity.key]: { ...p[entity.key], [f.key]: e.target.value } }))} className="mt-1 w-full rounded border border-[#E2E8F0] px-2 py-1.5"><option value="">Seleccionar...</option>{options.map((o) => <option key={o} value={o}>{relLabels.get(o) ?? o}</option>)}</select> : <input value={entityForms[entity.key]?.[f.key] ?? ""} onChange={(e) => setEntityForms((p) => ({ ...p, [entity.key]: { ...p[entity.key], [f.key]: e.target.value } }))} type={f.type ?? "text"} className="mt-1 w-full rounded border border-[#E2E8F0] px-2 py-1.5" />}</label>;
                 })}
               </div>
-              <div className="flex justify-end gap-2"><button onClick={() => setIsCrudModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button><button onClick={saveEntity} className="rounded bg-teal-700 px-4 py-2 text-sm font-semibold text-white">{formMode === "create" ? "Guardar" : "Actualizar"}</button></div>
+              <div className="flex justify-end gap-2"><button onClick={() => setIsCrudModalOpen(false)} className="rounded border border-[#E2E8F0] px-3 py-2 text-sm">Cancelar</button><button onClick={saveEntity} className="rounded bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white">{formMode === "create" ? "Guardar" : "Actualizar"}</button></div>
             </div>
           )}
         </Modal>

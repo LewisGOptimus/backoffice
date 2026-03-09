@@ -1,8 +1,19 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { fetchJson, isSuccess } from "@/lib/client/api";
 import toast from "react-hot-toast";
+
+type StatusProps = { loading: boolean; message: string };
+
+function BackofficeLoader({ loading, message }: StatusProps) {
+  if (!loading && message === "Listo") return null;
+  return (
+    <p className="mt-2 text-sm text-slate-700">
+      {loading ? "Procesando..." : message}
+    </p>
+  );
+}
 
 export default function BackOfficePage() {
   const [key, setKey] = useState("");
@@ -54,20 +65,22 @@ export default function BackOfficePage() {
 
   return (
     <main className="space-y-4">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-xl font-semibold text-slate-900">BackOffice</h2>
+      <section className="rounded-[16px] border border-[#E2E8F0] w-full bg-white p-5 shadow-(--shadow-soft)">
+        <h2 className="text-xl font-semibold text-[var(--color-primary)]">BackOffice</h2>
         <p className="text-sm text-slate-600">Acciones administrativas del entorno.</p>
       </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <label className="text-xs text-slate-700">Clave BackOffice
-          <input value={key} onChange={(e) => setKey(e.target.value)} placeholder="BACKOFFICE_ADMIN_KEY" className="mt-1 w-full max-w-sm rounded border border-slate-300 px-3 py-2 text-sm" />
-        </label>
-        <div className="mt-3 flex gap-2">
-          <button onClick={runSeed} disabled={loading} className="rounded bg-slate-900 px-4 py-2 text-sm font-semibold text-white">Cargar semilla</button>
-          <button onClick={runClean} disabled={loading} className="rounded bg-rose-700 px-4 py-2 text-sm font-semibold text-white">Limpiar base</button>
+      <section className="rounded-[16px] border border-[#E2E8F0] bg-white p-5 shadow-(--shadow-soft)">
+        <div className="flex flex-col gap-2">
+        <label className="text-xs text-slate-700 pl-2">Clave BackOffice</label>
+        <input value={key} onChange={(e) => setKey(e.target.value)} placeholder="BACKOFFICE_ADMIN_KEY" className="mt-1 w-full max-w-sm rounded border border-slate-300 px-3 py-2 text-sm" />
         </div>
-        <p className="mt-2 text-sm text-slate-700">{loading ? "Procesando..." : message}</p>
+ 
+        <div className="mt-3 flex gap-2">
+          <button onClick={runSeed} disabled={loading} className="rounded bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white">Cargar semilla</button>
+          <button onClick={runClean} disabled={loading} className="rounded bg-gray-400 px-4 py-2 text-sm font-semibold text-white">Limpiar base</button>
+        </div>
+        <BackofficeLoader loading={loading} message={message} />
       </section>
     </main>
   );

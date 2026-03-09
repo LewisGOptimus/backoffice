@@ -1,8 +1,35 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 :root {
-  --color-bg: #eef2f7;
-  --color-fg: #1f2937;
+
+
+  --color-primary: #007bff;
+
+  --color-primary-50: #edfaff;
+  --color-primary-100: #d6f2ff;
+  --color-primary-200: #b5eaff;
+  --color-primary-300: #83dfff;
+  --color-primary-400: #48cbff;
+  --color-primary-500: #007BFF;
+  --color-primary-600: #068fff;
+  --color-primary-700: #007bff;
+  --color-primary-800: #085ec5;
+  --color-primary-900: #0d519b;
+  --color-primary-950: #0e315d;
+
+
+  --color-bg: #F5F7FB;
+  --color-fg: #1E293B;
+  --color-fg-secondary: #68a2f5;
+
+  --color-secondary: #60A5FA;
+  --color-card: #FFFFFF;
+  --color-border: #E2E8F0;
+  --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+  --shadow-medium: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --radius-card: 16px;
+  --radius-button: 10px;
+  --radius-container: 20px;
 }
 
 @theme inline {
@@ -18,7 +45,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(180deg, #f6f8fb 0%, #edf2f7 100%);
+  background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-body), sans-serif;
 }

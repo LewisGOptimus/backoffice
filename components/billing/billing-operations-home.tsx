@@ -6,6 +6,7 @@ import { fetchJson, isSuccess } from "@/lib/client/api";
 import { formatDateOnly } from "@/lib/client/date-format";
 import { formatMoney } from "@/lib/client/currency-format";
 import { BillingAction, BillingAlert, CustomerSearchItem, ImpactPreviewResponse, OperationsDashboardResponse } from "@/lib/types/billing-v2";
+import { PageHeaderCard } from "../ui/page-header-card";
 
 const ACTION_OPTIONS: Array<{ id: BillingAction; label: string; template: Record<string, string> }> = [
   { id: "renew_subscription", label: "Renovar suscripcion", template: { suscripcion_id: "", billing_date: new Date().toISOString().slice(0, 10), generate_invoice: "true", discount_type: "", discount_value: "", discount_reason: "" } },
@@ -196,10 +197,10 @@ export function BillingOperationsHome() {
 
   return (
     <main className="space-y-4">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-2xl font-semibold text-slate-900">Operaciones de Billing</h2>
-        <p className="text-sm text-slate-600">Cola operativa, alertas y acciones con preview obligatorio.</p>
-      </section>
+      <PageHeaderCard
+        title="Operaciones de Billing"
+        description="Cola operativa, alertas y acciones con preview obligatorio."
+      />
 
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <article className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-xs text-slate-500">Renovaciones 30d</p><p className="text-2xl font-semibold">{dashboard?.kpis.renewals_next_30_days ?? 0}</p></article>
@@ -209,7 +210,7 @@ export function BillingOperationsHome() {
 
       <section className="grid gap-4 xl:grid-cols-[1.3fr_1fr]">
         <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="mb-3 flex items-center justify-between"><h3 className="font-semibold text-slate-900">Bandeja operacional</h3><button onClick={runAlertsJob} disabled={loading} className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white">Ejecutar batch alertas</button></div>
+          <div className="mb-3 flex items-center justify-between"><h3 className="font-semibold text-slate-900">Bandeja operacional</h3><button onClick={runAlertsJob} disabled={loading} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Ejecutar batch alertas</button></div>
           <div className="max-h-[420px] overflow-auto rounded border border-slate-200">
             <table className="min-w-full text-xs">
               <thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left">Tipo</th><th className="px-2 py-2 text-left">Severidad</th><th className="px-2 py-2 text-left">Estado</th><th className="px-2 py-2 text-left">Acciones</th></tr></thead>
@@ -277,7 +278,7 @@ export function BillingOperationsHome() {
           ))}
         </div>
         <div className="mt-3 flex gap-2">
-          <button onClick={runPreview} disabled={loading} className="rounded bg-slate-900 px-3 py-2 text-xs text-white">1) Preview</button>
+          <button onClick={runPreview} disabled={loading} className="rounded bg-[var(--color-primary)] px-3 py-2 text-xs text-white">1) Preview</button>
           <button onClick={runExecute} disabled={loading || !preview} className="rounded bg-teal-700 px-3 py-2 text-xs text-white disabled:opacity-50">2) Confirmar</button>
         </div>
         {preview && (

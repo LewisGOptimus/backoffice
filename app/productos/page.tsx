@@ -6,6 +6,9 @@ import { formatDateOnly } from "@/lib/client/date-format";
 import { formatMoney } from "@/lib/client/currency-format";
 import { toHumanConsumableError, toHumanError } from "@/lib/client/error-mapping";
 import toast from "react-hot-toast";
+import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
+import { PageHeaderCard } from "@/components/ui/page-header-card";
+import { AppModal } from "@/components/ui/modal";
 
 type ProductType = "SOFTWARE" | "MODULO" | "ADDON" | "CONSUMIBLE" | "SERVICIO";
 type ScopeType = "EMPRESA" | "USUARIO" | "GLOBAL";
@@ -360,50 +363,91 @@ export default function ProductosPage() {
 
   return (
     <main className="space-y-4">
-      <section className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900">Productos</h2>
-        <button onClick={openCreate} className="rounded bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white">Nuevo producto</button>
-      </section>
+      <PageHeaderCard
+        title="Productos"
+        description="Productos de la aplicación."
+      >
+        <button onClick={openCreate} className="rounded bg-[var(--color-primary)]	 px-3 py-1.5 text-sm font-semibold text-white">Nuevo producto</button>
+      </PageHeaderCard>
+
 
       <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="max-h-[360px] overflow-auto rounded border border-slate-200">
-          <table className="min-w-full text-xs">
-            <thead className="bg-slate-50">
-              <tr>
-                <th className="px-2 py-2 text-left">#</th>
-                <th className="px-2 py-2 text-left">Codigo</th>
-                <th className="px-2 py-2 text-left">Nombre</th>
-                <th className="px-2 py-2 text-left">Tipo</th>
-                <th className="px-2 py-2 text-left">Alcance</th>
-                <th className="px-2 py-2 text-left">Unidad</th>
-                <th className="px-2 py-2 text-left">Consumible</th>
-                <th className="px-2 py-2 text-left">Estado</th>
-                <th className="px-2 py-2 text-left">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productos.map((p, idx) => (
-                <tr key={p.id} className="border-t border-slate-100">
-                  <td className="px-2 py-2 text-slate-700">{idx + 1}</td>
-                  <td className="px-2 py-2 text-slate-700">{p.codigo}</td>
-                  <td className="px-2 py-2 text-slate-700">{p.nombre}</td>
-                  <td className="px-2 py-2 text-slate-700"><Badge text={p.tipo} /></td>
-                  <td className="px-2 py-2 text-slate-700"><Badge text={p.alcance} /></td>
-                  <td className="px-2 py-2 text-slate-700">{p.tipo === "CONSUMIBLE" ? <Badge text={p.unidad_consumo ?? "SIN UNIDAD"} /> : "-"}</td>
-                  <td className="px-2 py-2 text-slate-700"><Badge text={p.es_consumible ? "SI" : "NO"} /></td>
-                  <td className="px-2 py-2 text-slate-700"><Badge text={p.activo ? "ACTIVO" : "INACTIVO"} /></td>
-                  <td className="px-2 py-2">
-                    <div className="flex gap-1">
-                      <button onClick={() => setSelectedProductId(p.id)} className="rounded border border-slate-300 px-2 py-1">Gestionar</button>
-                      <button onClick={() => openEdit(p)} className="rounded bg-slate-800 px-2 py-1 text-white">Editar</button>
-                      <button onClick={() => deleteProduct(p.id)} className="rounded bg-rose-700 px-2 py-1 text-white">Eliminar</button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DataTable<ProductoRow>
+          className="max-h-[360px] overflow-auto rounded border border-slate-200"
+          rows={productos}
+          getRowKey={(row, index) => `${row.id}-${index}`}
+          columns={[
+            {
+              key: "__index",
+              header: "#",
+              cellClassName: "text-slate-700 w-[40px]",
+              render: (_row, index) => index + 1,
+            },
+            { key: "codigo", header: "Codigo", cellClassName: "text-slate-700" },
+            { key: "nombre", header: "Nombre", cellClassName: "text-slate-700" },
+            {
+              key: "tipo",
+              header: "Tipo",
+              cellClassName: "text-slate-700",
+              render: (row) => <Badge text={row.tipo} />,
+            },
+            {
+              key: "alcance",
+              header: "Alcance",
+              cellClassName: "text-slate-700",
+              render: (row) => <Badge text={row.alcance} />,
+            },
+            {
+              key: "unidad_consumo",
+              header: "Unidad",
+              cellClassName: "text-slate-700",
+              render: (row) =>
+                row.tipo === "CONSUMIBLE" ? (
+                  <Badge text={row.unidad_consumo ?? "SIN UNIDAD"} />
+                ) : (
+                  "-"
+                ),
+            },
+            {
+              key: "es_consumible",
+              header: "Consumible",
+              cellClassName: "text-slate-700",
+              render: (row) => <Badge text={row.es_consumible ? "SI" : "NO"} />,
+            },
+            {
+              key: "activo",
+              header: "Estado",
+              cellClassName: "text-slate-700",
+              render: (row) => <Badge text={row.activo ? "ACTIVO" : "INACTIVO"} />,
+            },
+            {
+              key: "__actions",
+              header: "Acciones",
+              render: (row) => (
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => setSelectedProductId(row.id)}
+                    className="rounded border border-slate-300 px-2 py-1"
+                  >
+                    Gestionar
+                  </button>
+                  <button
+                    onClick={() => openEdit(row)}
+                    className="rounded bg-slate-800 px-2 py-1 text-white"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => deleteProduct(row.id)}
+                    className="rounded bg-rose-700 px-2 py-1 text-white"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              ),
+            },
+          ] as DataTableColumn<ProductoRow>[]}
+        />
       </section>
 
       {productoSeleccionado && (
@@ -432,7 +476,7 @@ export default function ProductosPage() {
               <div className="flex gap-1 items-center">
                 <Badge text={productoSeleccionado.tipo} />
                 {productoSeleccionado.tipo === "SERVICIO" && <Badge text="PRORRATEO CONFIGURABLE" />}
-                <button onClick={() => setManagePricesModalOpen(true)} className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white">Agregar precio</button>
+                <button onClick={() => setManagePricesModalOpen(true)} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar precio</button>
               </div>
             </div>
             {productoSeleccionado.tipo === "CONSUMIBLE" && <p className="mt-2 text-xs text-slate-600">Para consumibles usa un precio activo y vigente para habilitar su venta y consumo en suscripciones.</p>}
@@ -459,10 +503,12 @@ export default function ProductosPage() {
 
       <p className="text-xs text-slate-600">{message}</p>
 
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
-          <div className="w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
-            <h3 className="text-base font-semibold text-slate-900">{editingId ? "Editar producto" : "Nuevo producto"}</h3>
+      <AppModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        maxWidthClassName="max-w-3xl"
+        title={editingId ? "Editar producto" : "Nuevo producto"}
+      >
             <div className="mt-3 grid gap-2 md:grid-cols-2">
               <label className="text-xs">Codigo<input value={productForm.codigo} onChange={(e) => setProductForm((p) => ({ ...p, codigo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
               <label className="text-xs">Nombre<input value={productForm.nombre} onChange={(e) => setProductForm((p) => ({ ...p, nombre: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
@@ -529,16 +575,17 @@ export default function ProductosPage() {
 
             <div className="mt-3 flex justify-end gap-2">
               <button onClick={() => setModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-              <button onClick={saveProduct} className="rounded bg-slate-900 px-3 py-2 text-sm text-white">Guardar</button>
+              <button onClick={saveProduct} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Guardar</button>
             </div>
-          </div>
-        </div>
-      )}
+      </AppModal>
 
-      {managePricesModalOpen && productoSeleccionado && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
-          <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
-            <h3 className="text-base font-semibold text-slate-900">Agregar precio al producto</h3>
+      {productoSeleccionado && (
+        <AppModal
+          open={managePricesModalOpen}
+          onClose={() => setManagePricesModalOpen(false)}
+          maxWidthClassName="max-w-2xl"
+          title="Agregar precio al producto"
+        >
             <div className="mt-3 grid gap-2 md:grid-cols-2">
               <label className="text-xs">Moneda<select value={priceForm.moneda_id} onChange={(e) => setPriceForm((p) => ({ ...p, moneda_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Moneda...</option>{monedas.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}</select></label>
               <label className="text-xs">Periodo<select value={priceForm.periodo} onChange={(e) => setPriceForm((p) => ({ ...p, periodo: e.target.value as PricePeriod }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option><option value="VITALICIO">VITALICIO</option><option value="UNICO">UNICO</option></select></label>
@@ -549,12 +596,10 @@ export default function ProductosPage() {
             </div>
             <div className="mt-3 flex justify-end gap-2">
               <button onClick={() => setManagePricesModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-              <button onClick={addPrice} className="rounded bg-slate-900 px-3 py-2 text-sm text-white">Agregar precio</button>
+              <button onClick={addPrice} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Agregar precio</button>
             </div>
-          </div>
-        </div>
+        </AppModal>
       )}
     </main>
   );
 }
-

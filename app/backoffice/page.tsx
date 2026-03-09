@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { fetchJson, isSuccess } from "@/lib/client/api";
 import toast from "react-hot-toast";
+import { PageHeaderCard } from "@/components/ui/page-header-card";
 
 type StatusProps = { loading: boolean; message: string };
 
@@ -65,10 +66,10 @@ export default function BackOfficePage() {
 
   return (
     <main className="space-y-4">
-      <section className="rounded-[16px] border border-[#E2E8F0] w-full bg-white p-5 shadow-(--shadow-soft)">
-        <h2 className="text-xl font-semibold text-[var(--color-primary)]">BackOffice</h2>
-        <p className="text-sm text-slate-600">Acciones administrativas del entorno.</p>
-      </section>
+      <PageHeaderCard
+        title="BackOffice"
+        description="Acciones administrativas del entorno."
+      />
 
       <section className="rounded-[16px] border border-[#E2E8F0] bg-white p-5 shadow-(--shadow-soft)">
         <div className="flex flex-col gap-2">

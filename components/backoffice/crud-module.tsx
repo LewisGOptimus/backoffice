@@ -1,10 +1,12 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { fetchJson, isSuccess } from "@/lib/client/api";
 import { formatDateOnly, looksLikeDateField } from "@/lib/client/date-format";
 import { formatMoney, looksLikeMoneyField } from "@/lib/client/currency-format";
 import toast from "react-hot-toast";
+import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
+import { AppModal } from "@/components/ui/modal";
 
 type FieldType = "text" | "number" | "date" | "select";
 
@@ -31,20 +33,6 @@ type Props = {
   initial: Record<string, string>;
 };
 
-function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
-      <div className="w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-          <button onClick={onClose} className="rounded border border-slate-300 px-2 py-1 text-xs">Cerrar</button>
-        </div>
-        {children}
-      </div>
-    </div>
-  );
-}
-
 function formatCell(value: unknown, badge?: boolean, key?: string) {
   const text = key && looksLikeDateField(key)
     ? formatDateOnly(value)
@@ -64,6 +52,48 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const orderedRows = useMemo(() => [...rows], [rows]);
+
+  const tableColumns: DataTableColumn<Row>[] = useMemo(() => {
+    const base: DataTableColumn<Row>[] = [
+      {
+        key: "__index",
+        header: "#",
+        headerClassName: "text-white bg-[var(--color-primary)]",
+        cellClassName: "text-slate-700 w-[40px]",
+        render: (_row, index) => index + 1,
+      },
+      ...columns.map<DataTableColumn<Row>>((c) => ({
+        key: c.key,
+        header: c.label,
+        headerClassName: "text-white bg-[var(--color-primary)]",
+        cellClassName: "text-slate-700",
+        render: (row) => formatCell(row[c.key], c.badge, c.key),
+      })),
+      {
+        key: "__actions",
+        header: "Acciones",
+        headerClassName: "text-white bg-[var(--color-primary)]",
+        cellClassName: "",
+        render: (row) => (
+          <div className="flex gap-1.5">
+            <button
+              onClick={() => openEdit(row)}
+              className="rounded bg-slate-800 px-2 py-1 text-[11px] text-white"
+            >
+              Editar
+            </button>
+            <button
+              onClick={() => remove(row)}
+              className="rounded bg-rose-700 px-2 py-1 text-[11px] text-white"
+            >
+              Eliminar
+            </button>
+          </div>
+        ),
+      },
+    ];
+    return base;
+  }, [columns]);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -147,58 +177,46 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
     <section className="space-y-3 rounded-2xl border border-slate-200 bg-white w-full p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-        <button onClick={openCreate} className="rounded bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white">Nuevo</button>
+        <button onClick={openCreate} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs font-semibold text-white">Nuevo</button>
       </div>
-      <div className="max-h-[620px] overflow-auto rounded border border-slate-200">
-        <table className="min-w-full text-xs">
-          <thead className="bg-[var(--color-primary-500)]">
-            <tr>
-              <th className="px-2 py-2 text-left text-white ">#</th>
-              {columns.map((c) => <th key={c.key} className="px-2 py-2 text-left text-white">{c.label}</th>)}
-              <th className="px-2 py-2 text-left text-white">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orderedRows.map((row, idx) => (
-              <tr key={`${String(row.id)}-${idx}`} className="border-t border-slate-100">
-                <td className="px-2 py-2 text-slate-700">{idx + 1}</td>
-                {columns.map((c) => <td key={c.key} className="px-2 py-2 text-slate-700">{formatCell(row[c.key], c.badge, c.key)}</td>)}
-                <td className="px-2 py-2">
-                  <div className="flex gap-1.5">
-                    <button onClick={() => openEdit(row)} className="rounded bg-slate-800 px-2 py-1 text-[11px] text-white">Editar</button>
-                    <button onClick={() => remove(row)} className="rounded bg-rose-700 px-2 py-1 text-[11px] text-white">Eliminar</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        columns={tableColumns}
+        rows={orderedRows}
+        getRowKey={(row, index) => `${String(row.id ?? "")}-${index}`}
+        className="max-h-[620px] overflow-auto rounded border border-slate-200"
+      />
       <p className="text-xs text-slate-600">{loading ? "Cargando..." : message}</p>
 
-      {modalOpen && (
-        <Modal title={editingId ? `Editar ${title}` : `Nuevo ${title}`} onClose={() => setModalOpen(false)}>
-          <div className="grid gap-2 md:grid-cols-2">
-            {fields.map((f) => (
-              <label key={f.key} className="text-xs text-slate-700">
-                {f.label}
-                {f.type === "select" ? (
-                  <select value={form[f.key] ?? ""} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-sm">
-                    <option value="">Seleccionar...</option>
-                    {(f.options ?? []).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-                  </select>
-                ) : (
-                  <input type={f.type ?? "text"} value={form[f.key] ?? ""} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-sm" />
-                )}
-              </label>
-            ))}
-          </div>
-          <div className="mt-3 flex justify-end gap-2">
+      <AppModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        maxWidthClassName="max-w-3xl"
+        title={editingId ? `Editar ${title}` : `Nuevo ${title}`}
+        description="Completa los campos y guarda los cambios para actualizar el registro."
+        footer={(
+          <div className="flex justify-end gap-2">
             <button onClick={() => setModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-            <button onClick={save} className="rounded bg-slate-900 px-3 py-2 text-sm text-white">Guardar</button>
+            <button onClick={save} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Guardar</button>
           </div>
-        </Modal>
-      )}
+        )}
+      >
+        <div className="grid gap-2 md:grid-cols-2">
+          {fields.map((f) => (
+            <label key={f.key} className="text-xs text-slate-700">
+              {f.label}
+              {f.type === "select" ? (
+                <select value={form[f.key] ?? ""} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-sm">
+                  <option value="">Seleccionar...</option>
+                  {(f.options ?? []).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                </select>
+              ) : (
+                <input type={f.type ?? "text"} value={form[f.key] ?? ""} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-sm" />
+              )}
+            </label>
+          ))}
+        </div>
+      </AppModal>
+      
     </section>
   );
 }

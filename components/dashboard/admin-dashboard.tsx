@@ -7,6 +7,7 @@ import { formatDateOnly, looksLikeDateField } from "@/lib/client/date-format";
 import { formatMoney, looksLikeMoneyField } from "@/lib/client/currency-format";
 import { toHumanError } from "@/lib/client/error-mapping";
 import { WorkflowId } from "@/lib/types/workflows";
+import { AppModal } from "@/components/ui/modal";
 
 type Row = Record<string, unknown> & { id?: string };
 type FormMode = "create" | "edit";
@@ -67,20 +68,6 @@ function asBool(v: string) { return v === "true"; }
 function asDate(v: unknown): string { return (typeof v === "string" ? v : "").slice(0, 10); }
 function inDateRange(target: string, from: unknown, to: unknown) { if (!target) return false; return (!from || asDate(from) <= target) && (!to || asDate(to) >= target); }
 function addPeriod(dateIso: string, periodo: string) { const d = new Date(`${dateIso}T00:00:00Z`); if (periodo === "MENSUAL") d.setUTCMonth(d.getUTCMonth() + 1); if (periodo === "TRIMESTRAL") d.setUTCMonth(d.getUTCMonth() + 3); if (periodo === "ANUAL") d.setUTCFullYear(d.getUTCFullYear() + 1); return d.toISOString().slice(0, 10); }
-
-function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1E293B]/50 p-4">
-      <div className="w-full max-w-4xl rounded-[20px] border border-[#E2E8F0] bg-white p-6 shadow-(--shadow-medium)">
-        <div className="mb-3 flex items-center justify-between">
-          <h4 className="text-base font-semibold text-[#1E293B]">{title}</h4>
-          <button onClick={onClose} className="rounded border border-[#E2E8F0] px-2 py-1 text-xs text-[#64748B]">Cerrar</button>
-        </div>
-        {children}
-      </div>
-    </div>
-  );
-}
 
 export function AdminDashboard() {
   const { health, history, addHistory, refreshHealth } = useAppState();
@@ -480,8 +467,13 @@ export function AdminDashboard() {
         </section>
       </section>
 
-      {isCrudModalOpen && entity.mutable && (
-        <Modal title={formMode === "create" ? `Nuevo ${entity.label}` : `Editar ${entity.label}`} onClose={() => setIsCrudModalOpen(false)}>
+      {entity.mutable && (
+        <AppModal
+          open={isCrudModalOpen}
+          onClose={() => setIsCrudModalOpen(false)}
+          maxWidthClassName="max-w-4xl"
+          title={formMode === "create" ? `Nuevo ${entity.label}` : `Editar ${entity.label}`}
+        >
           {entity.key === "suscripciones" && formMode === "create" ? (
             <div className="space-y-3">
               <div className="grid gap-2 md:grid-cols-2">
@@ -525,7 +517,7 @@ export function AdminDashboard() {
               <div className="flex justify-end gap-2"><button onClick={() => setIsCrudModalOpen(false)} className="rounded border border-[#E2E8F0] px-3 py-2 text-sm">Cancelar</button><button onClick={saveEntity} className="rounded bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white">{formMode === "create" ? "Guardar" : "Actualizar"}</button></div>
             </div>
           )}
-        </Modal>
+        </AppModal>
       )}
     </main>
   );

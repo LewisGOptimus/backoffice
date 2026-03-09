@@ -6,6 +6,9 @@ import { formatDateOnly } from "@/lib/client/date-format";
 import { formatMoney } from "@/lib/client/currency-format";
 import { toHumanConsumableError, toHumanError } from "@/lib/client/error-mapping";
 import toast from "react-hot-toast";
+import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
+import { PageHeaderCard } from "@/components/ui/page-header-card";
+import { AppModal } from "@/components/ui/modal";
 
 type Row = Record<string, unknown> & { id?: string };
 
@@ -571,7 +574,7 @@ export default function SuscripcionesPage() {
       <button
         onClick={mode === "existing" ? addItemExisting : addDraftItem}
         disabled={mode === "existing" && autoInvoiceOnAddItem && !selectedDraftPrice}
-        className="mt-3 rounded bg-slate-900 px-3 py-1.5 text-xs text-white disabled:opacity-50"
+        className="mt-3 rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white disabled:opacity-50"
       >
         {mode === "existing" ? "Agregar item a suscripcion" : "Agregar item manual"}
       </button>
@@ -580,49 +583,143 @@ export default function SuscripcionesPage() {
 
   return (
     <main className="space-y-4">
-      <section className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><h2 className="text-lg font-semibold">Suscripciones</h2><button onClick={openCreate} className="rounded bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white">Nueva suscripcion</button></section>
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div className="max-h-[350px] overflow-auto rounded border border-slate-200"><table className="min-w-full text-xs"><thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left">#</th><th className="px-2 py-2 text-left">Empresa</th><th className="px-2 py-2 text-left">Plan</th><th className="px-2 py-2 text-left">Estado</th><th className="px-2 py-2 text-left">Operativo</th><th className="px-2 py-2 text-left">Prorroga</th><th className="px-2 py-2 text-left">Periodo</th><th className="px-2 py-2 text-left">Fin ciclo</th><th className="px-2 py-2 text-left">Acciones</th></tr></thead><tbody>{rows.map((r, idx) => <tr key={String(r.id)} className="border-t border-slate-100"><td className="px-2 py-2">{idx + 1}</td><td className="px-2 py-2">{companyLabel(String(r.empresa_id))}</td><td className="px-2 py-2">{planLabel(String(r.plan_id))}</td><td className="px-2 py-2">{badge(String(r.estado))}</td><td className="px-2 py-2">{badge(String(r.operational_status ?? "EN_SERVICIO"))}</td><td className="px-2 py-2">{`${String(r.grace_days_granted ?? 0)} dias`}</td><td className="px-2 py-2">{badge(String(r.billing_cycle ?? r.periodo))}</td><td className="px-2 py-2">{formatDateOnly(r.periodo_actual_fin)}</td><td className="px-2 py-2"><div className="flex gap-1"><button onClick={() => setSelected(String(r.id))} className="rounded border border-slate-300 px-2 py-1">Items</button><button onClick={() => openEdit(r)} className="rounded bg-slate-800 px-2 py-1 text-white">Editar</button><button onClick={() => remove(String(r.id))} className="rounded bg-rose-700 px-2 py-1 text-white">Eliminar</button></div></td></tr>)}</tbody></table></div></section>
+      <PageHeaderCard title="Suscripciones" description="Aquí se gestionan las suscripciones">
+        <button
+          onClick={openCreate}
+          className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs font-semibold text-white"
+        >
+          Nueva suscripcion
+        </button>
+      </PageHeaderCard>
+      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+        <DataTable<Row>
+          className="max-h-[350px] overflow-auto rounded border border-slate-200"
+          rows={rows}
+          getRowKey={(r, idx) => `${String(r.id ?? "")}-${idx}`}
+          columns={[
+            {
+              key: "__index",
+              header: "#",
+              cellClassName: "w-[40px]",
+              render: (_r, idx) => idx + 1,
+            },
+            {
+              key: "empresa",
+              header: "Empresa",
+              render: (r) => companyLabel(String((r as any).empresa_id)),
+            },
+            {
+              key: "plan",
+              header: "Plan",
+              render: (r) => planLabel(String((r as any).plan_id)),
+            },
+            {
+              key: "estado",
+              header: "Estado",
+              render: (r) => badge(String((r as any).estado)),
+            },
+            {
+              key: "operativo",
+              header: "Operativo",
+              render: (r) =>
+                badge(String((r as any).operational_status ?? "EN_SERVICIO")),
+            },
+            {
+              key: "prorroga",
+              header: "Prorroga",
+              render: (r) =>
+                `${String((r as any).grace_days_granted ?? 0)} dias`,
+            },
+            {
+              key: "periodo",
+              header: "Periodo",
+              render: (r) =>
+                badge(String((r as any).billing_cycle ?? (r as any).periodo)),
+            },
+            {
+              key: "fin_ciclo",
+              header: "Fin ciclo",
+              render: (r) => formatDateOnly((r as any).periodo_actual_fin),
+            },
+            {
+              key: "acciones",
+              header: "Acciones",
+              render: (r) => (
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => setSelected(String((r as any).id))}
+                    className="rounded border border-slate-300 px-2 py-1"
+                  >
+                    Items
+                  </button>
+                  <button
+                    onClick={() => openEdit(r)}
+                    className="rounded bg-slate-800 px-2 py-1 text-white"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => remove(String((r as any).id))}
+                    className="rounded bg-rose-700 px-2 py-1 text-white"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              ),
+            },
+          ] as DataTableColumn<Row>[]}
+        />
+      </section>
 
-      {selected && <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div className="flex items-center justify-between"><h3 className="font-semibold">Items de suscripcion</h3><button onClick={() => { setAutoInvoiceOnAddItem(true); setAddItemDiscount(EMPTY_DISCOUNT); setAddItemModalOpen(true); }} className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white">Agregar item</button></div><div className="max-h-64 overflow-auto rounded border border-slate-200"><table className="min-w-full text-xs"><thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left">Producto</th><th className="px-2 py-2 text-left">Precio</th><th className="px-2 py-2 text-left">Cantidad</th><th className="px-2 py-2 text-left">Pago</th><th className="px-2 py-2 text-left">Efectivo</th><th className="px-2 py-2 text-left">Estado</th><th className="px-2 py-2 text-left">Acciones</th></tr></thead><tbody>{selectedItems.map((it) => <tr key={String(it.id)} className="border-t border-slate-100"><td className="px-2 py-2">{productLabel(String(it.producto_id))}</td><td className="px-2 py-2">{it.precio_id ? priceLabel(String(it.precio_id)) : "-"}</td><td className="px-2 py-2">{String(it.cantidad)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_inicio)} - {formatDateOnly(it.fecha_fin)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_efectiva_inicio)} - {formatDateOnly(it.fecha_efectiva_fin)}</td><td className="px-2 py-2">{badge(String(it.estado))}</td><td className="px-2 py-2"><div className="flex gap-1"><button onClick={() => openEditItem(it)} className="rounded bg-slate-800 px-2 py-1 text-white">Editar</button><button onClick={() => finalizeItem(String(it.id))} className="rounded bg-amber-700 px-2 py-1 text-white">Finalizar</button><button onClick={() => removeItem(String(it.id))} className="rounded bg-rose-700 px-2 py-1 text-white">Eliminar</button></div></td></tr>)}</tbody></table></div>
+      {selected && <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div className="flex items-center justify-between"><h3 className="font-semibold">Items de suscripcion</h3><button onClick={() => { setAutoInvoiceOnAddItem(true); setAddItemDiscount(EMPTY_DISCOUNT); setAddItemModalOpen(true); }} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar item</button></div><div className="max-h-64 overflow-auto rounded border border-slate-200"><table className="min-w-full text-xs"><thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left">Producto</th><th className="px-2 py-2 text-left">Precio</th><th className="px-2 py-2 text-left">Cantidad</th><th className="px-2 py-2 text-left">Pago</th><th className="px-2 py-2 text-left">Efectivo</th><th className="px-2 py-2 text-left">Estado</th><th className="px-2 py-2 text-left">Acciones</th></tr></thead><tbody>{selectedItems.map((it) => <tr key={String(it.id)} className="border-t border-slate-100"><td className="px-2 py-2">{productLabel(String(it.producto_id))}</td><td className="px-2 py-2">{it.precio_id ? priceLabel(String(it.precio_id)) : "-"}</td><td className="px-2 py-2">{String(it.cantidad)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_inicio)} - {formatDateOnly(it.fecha_fin)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_efectiva_inicio)} - {formatDateOnly(it.fecha_efectiva_fin)}</td><td className="px-2 py-2">{badge(String(it.estado))}</td><td className="px-2 py-2"><div className="flex gap-1"><button onClick={() => openEditItem(it)} className="rounded bg-slate-800 px-2 py-1 text-white">Editar</button><button onClick={() => finalizeItem(String(it.id))} className="rounded bg-amber-700 px-2 py-1 text-white">Finalizar</button><button onClick={() => removeItem(String(it.id))} className="rounded bg-rose-700 px-2 py-1 text-white">Eliminar</button></div></td></tr>)}</tbody></table></div>
 
       <div className="rounded border border-slate-200 p-3">
         <h4 className="font-semibold text-slate-900">Entitlements vigentes</h4>
-        <div className="mt-2 max-h-56 overflow-auto rounded border border-slate-200">
-          <table className="min-w-full text-xs">
-            <thead className="bg-slate-50">
-              <tr>
-                <th className="px-2 py-2 text-left">Entitlement</th>
-                <th className="px-2 py-2 text-left">Valor</th>
-                <th className="px-2 py-2 text-left">Origen</th>
-                <th className="px-2 py-2 text-left">Vigencia</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedEntitlements.map((ent) => (
-                <tr key={`${ent.entitlement_id}-${ent.origen}-${ent.efectivo_desde}`} className="border-t border-slate-100">
-                  <td className="px-2 py-2">{ent.nombre} ({ent.codigo})</td>
-                  <td className="px-2 py-2">{ent.valor_entero ?? String(ent.valor_booleano ?? "-")}</td>
-                  <td className="px-2 py-2">{badge(ent.origen)}</td>
-                  <td className="px-2 py-2">{formatDateOnly(ent.efectivo_desde)} - {formatDateOnly(ent.efectivo_hasta)}</td>
-                </tr>
-              ))}
-              {selectedEntitlements.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="px-2 py-3 text-center text-slate-500">Sin entitlements vigentes.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <DataTable<SubscriptionEntitlementRow>
+          className="mt-2 max-h-56 overflow-auto rounded border border-slate-200"
+          rows={selectedEntitlements}
+          getRowKey={(ent) =>
+            `${ent.entitlement_id}-${ent.origen}-${ent.efectivo_desde}`
+          }
+          emptyMessage="Sin entitlements vigentes."
+          columns={[
+            {
+              key: "entitlement",
+              header: "Entitlement",
+              render: (ent) => `${ent.nombre} (${ent.codigo})`,
+            },
+            {
+              key: "valor",
+              header: "Valor",
+              render: (ent) =>
+                ent.valor_entero ?? String(ent.valor_booleano ?? "-"),
+            },
+            {
+              key: "origen",
+              header: "Origen",
+              render: (ent) => badge(ent.origen),
+            },
+            {
+              key: "vigencia",
+              header: "Vigencia",
+              render: (ent) =>
+                `${formatDateOnly(ent.efectivo_desde)} - ${formatDateOnly(
+                  ent.efectivo_hasta,
+                )}`,
+            },
+          ] as DataTableColumn<SubscriptionEntitlementRow>[]}
+        />
       </div>
 
       </section>}
       <p className="text-xs text-slate-600">{message}</p>
 
-      {modal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
-          <div className="w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
-            <h3 className="text-base font-semibold">{editing ? "Editar suscripcion" : "Nueva suscripcion"}</h3>
+      <AppModal
+        open={modal}
+        onClose={() => setModal(false)}
+        maxWidthClassName="max-w-3xl"
+        title={editing ? "Editar suscripcion" : "Nueva suscripcion"}
+      >
             <div className="mt-3 grid gap-2 md:grid-cols-2">
               <label className="text-xs">Empresa<select value={form.empresa_id} onChange={(e) => setForm((p) => ({ ...p, empresa_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Empresa...</option>{lookups.empresas.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}</select></label>
               <label className="text-xs">Plan<select value={form.plan_id} onChange={(e) => setForm((p) => ({ ...p, plan_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Plan...</option>{lookups.planes.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}</select></label>
@@ -664,20 +761,46 @@ export default function SuscripcionesPage() {
             )}
             <div className="mt-3 flex justify-end gap-2">
               <button onClick={() => setModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-              <button onClick={save} className="rounded bg-slate-900 px-3 py-2 text-sm text-white">Guardar</button>
+              <button onClick={save} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Guardar</button>
             </div>
-          </div>
+      </AppModal>
+
+      <AppModal
+        open={itemModalOpen}
+        onClose={() => setItemModalOpen(false)}
+        maxWidthClassName="max-w-2xl"
+        title="Editar item de suscripcion"
+      >
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          <label className="text-xs">Producto<select value={itemForm.producto_id} onChange={(e) => setItemForm((p) => ({ ...p, producto_id: e.target.value, precio_id: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Producto...</option>{lookups.productos.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}</select></label>
+          <label className="text-xs">Precio ({editingItemProduct?.es_consumible ? "obligatorio" : "opcional"})<select value={itemForm.precio_id} onChange={(e) => setItemForm((p) => ({ ...p, precio_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Precio...</option>{availableEditPrices.map((pr) => <option key={pr.id} value={pr.id}>{`${pr.periodo} | ${formatMoney(pr.valor)} | ${formatDateOnly(pr.valido_desde)} - ${formatDateOnly(pr.valido_hasta)}`}</option>)}</select></label>
+          <label className="text-xs">Cantidad<input type="number" value={itemForm.cantidad} onChange={(e) => setItemForm((p) => ({ ...p, cantidad: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
+          <label className="text-xs">Fecha inicio<input type="date" value={itemForm.fecha_inicio} onChange={(e) => setItemForm((p) => ({ ...p, fecha_inicio: e.target.value, precio_id: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
+          <label className="text-xs">Fecha fin<input type="date" value={itemForm.fecha_fin} onChange={(e) => setItemForm((p) => ({ ...p, fecha_fin: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
+          <label className="text-xs">Efectiva inicio<input type="date" value={itemForm.fecha_efectiva_inicio} onChange={(e) => setItemForm((p) => ({ ...p, fecha_efectiva_inicio: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
+          <label className="text-xs">Efectiva fin<input type="date" value={itemForm.fecha_efectiva_fin} onChange={(e) => setItemForm((p) => ({ ...p, fecha_efectiva_fin: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
         </div>
-      )}
+        <p className="mt-2 text-xs text-slate-600">Para consumibles, el precio es obligatorio y debe estar vigente para la fecha de inicio.</p>
+        <div className="mt-3 flex justify-end gap-2">
+          <button onClick={() => setItemModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
+          <button onClick={saveItemEdit} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Guardar cambios</button>
+        </div>
+      </AppModal>
 
-      {itemModalOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4"><div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl"><h3 className="text-base font-semibold">Editar item de suscripcion</h3><div className="mt-3 grid gap-2 md:grid-cols-2"><label className="text-xs">Producto<select value={itemForm.producto_id} onChange={(e) => setItemForm((p) => ({ ...p, producto_id: e.target.value, precio_id: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Producto...</option>{lookups.productos.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}</select></label><label className="text-xs">Precio ({editingItemProduct?.es_consumible ? "obligatorio" : "opcional"})<select value={itemForm.precio_id} onChange={(e) => setItemForm((p) => ({ ...p, precio_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Precio...</option>{availableEditPrices.map((pr) => <option key={pr.id} value={pr.id}>{`${pr.periodo} | ${formatMoney(pr.valor)} | ${formatDateOnly(pr.valido_desde)} - ${formatDateOnly(pr.valido_hasta)}`}</option>)}</select></label><label className="text-xs">Cantidad<input type="number" value={itemForm.cantidad} onChange={(e) => setItemForm((p) => ({ ...p, cantidad: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label><label className="text-xs">Fecha inicio<input type="date" value={itemForm.fecha_inicio} onChange={(e) => setItemForm((p) => ({ ...p, fecha_inicio: e.target.value, precio_id: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label><label className="text-xs">Fecha fin<input type="date" value={itemForm.fecha_fin} onChange={(e) => setItemForm((p) => ({ ...p, fecha_fin: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label><label className="text-xs">Efectiva inicio<input type="date" value={itemForm.fecha_efectiva_inicio} onChange={(e) => setItemForm((p) => ({ ...p, fecha_efectiva_inicio: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label><label className="text-xs">Efectiva fin<input type="date" value={itemForm.fecha_efectiva_fin} onChange={(e) => setItemForm((p) => ({ ...p, fecha_efectiva_fin: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label></div><p className="mt-2 text-xs text-slate-600">Para consumibles, el precio es obligatorio y debe estar vigente para la fecha de inicio.</p><div className="mt-3 flex justify-end gap-2"><button onClick={() => setItemModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button><button onClick={saveItemEdit} className="rounded bg-slate-900 px-3 py-2 text-sm text-white">Guardar cambios</button></div></div></div>}
-
-      {addItemModalOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4"><div className="w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl"><h3 className="text-base font-semibold">Agregar item de suscripcion</h3>{renderGuidedItemBuilder("existing")}<div className="mt-3 flex justify-end"><button onClick={() => setAddItemModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cerrar</button></div></div></div>}
+      <AppModal
+        open={addItemModalOpen}
+        onClose={() => setAddItemModalOpen(false)}
+        maxWidthClassName="max-w-3xl"
+        title="Agregar item de suscripcion"
+      >
+        {renderGuidedItemBuilder("existing")}
+        <div className="mt-3 flex justify-end">
+          <button onClick={() => setAddItemModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cerrar</button>
+        </div>
+      </AppModal>
     </main>
   );
 }
-
-
 
 
 

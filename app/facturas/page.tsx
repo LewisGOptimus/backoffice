@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { CrudModule } from "@/components/backoffice/crud-module";
 import { fetchJson, isSuccess } from "@/lib/client/api";
 import toast from "react-hot-toast";
+import { PageHeaderCard } from "@/components/ui/page-header-card";
 
 type Lookups = {
   empresas: Array<{ value: string; label: string }>;
@@ -28,6 +29,10 @@ export default function FacturasPage() {
   }, []);
 
   return (
+    <>
+    <div className="space-y-4">
+    <PageHeaderCard title="Facturas" description="Aquí se gestionan las facturas"/>
+     
     <CrudModule
       title="Facturas"
       resource="facturas"
@@ -57,5 +62,7 @@ export default function FacturasPage() {
       ]}
       initial={{ empresa_id: "", suscripcion_id: "", fecha_emision: "", fecha_vencimiento: "", subtotal: "0", descuento_tipo: "", descuento_valor: "", descuento_monto: "0", descuento_motivo: "", total: "0", estado: "EMITIDA", metodo_pago: "MANUAL" }}
     />
+    </div>
+    </>
   );
 }

@@ -5,6 +5,9 @@ import { fetchJson, isSuccess } from "@/lib/client/api";
 import { formatDateOnly } from "@/lib/client/date-format";
 import { formatMoney } from "@/lib/client/currency-format";
 import toast from "react-hot-toast";
+import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
+import { PageHeaderCard } from "@/components/ui/page-header-card";
+import { AppModal } from "@/components/ui/modal";
 
 type Row = Record<string, unknown> & { id?: string };
 
@@ -457,30 +460,92 @@ export default function PlanesPage() {
 
   return (
     <main className="space-y-4">
-      <section className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900">Planes</h2>
-        <button onClick={openCreate} className="rounded bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white">Nuevo plan</button>
-      </section>
+      <PageHeaderCard title="Planes">
+        <button
+          onClick={openCreate}
+          className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs font-semibold text-white"
+        >
+          Nuevo plan
+        </button>
+      </PageHeaderCard>
 
       <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="max-h-[340px] overflow-auto rounded border border-slate-200">
-          <table className="min-w-full text-xs">
-            <thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left">#</th><th className="px-2 py-2 text-left">Nombre</th><th className="px-2 py-2 text-left">Pricing</th><th className="px-2 py-2 text-left">Precio</th><th className="px-2 py-2 text-left">Ciclo default</th><th className="px-2 py-2 text-left">Estado</th><th className="px-2 py-2 text-left">Acciones</th></tr></thead>
-            <tbody>
-              {planes.map((p, idx) => (
-                <tr key={String(p.id)} className="border-t border-slate-100">
-                  <td className="px-2 py-2">{idx + 1}</td>
-                  <td className="px-2 py-2">{String(p.nombre)}</td>
-                  <td className="px-2 py-2"><span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 font-semibold">{String(p.pricing_mode ?? "BUNDLE")}</span></td>
-                  <td className="px-2 py-2">{planPriceLabelById.get(String(p.id)) ?? "INVÁLIDO"}</td>
-                  <td className="px-2 py-2"><span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 font-semibold">{String(p.periodo)}</span></td>
-                  <td className="px-2 py-2"><span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 font-semibold">{String(p.activo)}</span></td>
-                  <td className="px-2 py-2"><div className="flex gap-1"><button onClick={() => setSelectedPlan(String(p.id))} className="rounded border border-slate-300 px-2 py-1">Gestionar</button><button onClick={() => openEdit(p)} className="rounded bg-slate-800 px-2 py-1 text-white">Editar</button><button onClick={() => deletePlan(String(p.id))} className="rounded bg-rose-700 px-2 py-1 text-white">Eliminar</button></div></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DataTable<Row>
+          className="max-h-[340px] overflow-auto rounded border border-slate-200"
+          rows={planes}
+          getRowKey={(row, index) => `${String(row.id ?? "")}-${index}`}
+          columns={[
+            {
+              key: "__index",
+              header: "#",
+              cellClassName: "w-[40px]",
+              render: (_row, index) => index + 1,
+            },
+            {
+              key: "nombre",
+              header: "Nombre",
+            },
+            {
+              key: "pricing_mode",
+              header: "Pricing",
+              render: (row) => (
+                <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 font-semibold">
+                  {String((row as any).pricing_mode ?? "BUNDLE")}
+                </span>
+              ),
+            },
+            {
+              key: "precio",
+              header: "Precio",
+              render: (row) =>
+                planPriceLabelById.get(String((row as any).id)) ?? "INVÁLIDO",
+            },
+            {
+              key: "periodo",
+              header: "Ciclo default",
+              render: (row) => (
+                <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 font-semibold">
+                  {String((row as any).periodo)}
+                </span>
+              ),
+            },
+            {
+              key: "activo",
+              header: "Estado",
+              render: (row) => (
+                <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 font-semibold">
+                  {String((row as any).activo)}
+                </span>
+              ),
+            },
+            {
+              key: "__actions",
+              header: "Acciones",
+              render: (row) => (
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => setSelectedPlan(String((row as any).id))}
+                    className="rounded border border-slate-300 px-2 py-1"
+                  >
+                    Gestionar
+                  </button>
+                  <button
+                    onClick={() => openEdit(row as any)}
+                    className="rounded bg-slate-800 px-2 py-1 text-white"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => deletePlan(String((row as any).id))}
+                    className="rounded bg-rose-700 px-2 py-1 text-white"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              ),
+            },
+          ] as DataTableColumn<Row>[]}
+        />
       </section>
 
       {selectedPlan && (
@@ -488,7 +553,7 @@ export default function PlanesPage() {
           <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-slate-900">Productos del plan</h3>
-              <button onClick={() => setManageProductsModal(true)} className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white">Agregar producto</button>
+              <button onClick={() => setManageProductsModal(true)} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar producto</button>
             </div>
             <ul className="mt-3 space-y-2 text-xs">{itemsSelected.map((x) => <li key={`${String(x.plan_id)}-${String(x.producto_id)}`} className="flex items-center justify-between rounded border border-slate-200 p-2"><span>{productName(String(x.producto_id))}</span><button onClick={() => removeProductFromPlan(String(x.plan_id), String(x.producto_id))} className="rounded bg-rose-700 px-2 py-1 text-white">Quitar</button></li>)}</ul>
           </article>
@@ -496,7 +561,7 @@ export default function PlanesPage() {
           <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-slate-900">Precios del plan</h3>
-              <button onClick={() => setManagePricesModal(true)} className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white">Agregar precio</button>
+              <button onClick={() => setManagePricesModal(true)} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar precio</button>
             </div>
             <ul className="mt-3 space-y-2 text-xs">
               {preciosSelected.map((pr) => (
@@ -515,7 +580,7 @@ export default function PlanesPage() {
           <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-slate-900">Entitlements del plan</h3>
-              <button onClick={() => setManageEntitlementsModal(true)} className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white">Agregar entitlement</button>
+              <button onClick={() => setManageEntitlementsModal(true)} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar entitlement</button>
             </div>
             <ul className="mt-3 space-y-2 text-xs">
               {entitlementsSelected.map((ep) => (
@@ -539,21 +604,23 @@ export default function PlanesPage() {
 
       <p className="text-xs text-slate-600">{message}</p>
 
-      {modal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
-          <div className="w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
-            <h3 className="text-base font-semibold">{editing ? "Editar plan" : "Nuevo plan"}</h3>
+      <AppModal
+        open={modal}
+        onClose={() => setModal(false)}
+        maxWidthClassName="max-w-3xl"
+        title={editing ? "Editar plan" : "Nuevo plan"}
+      >
 
             {!editing && (
               <div className="mt-2 flex gap-2">
-                <button onClick={() => setStep(1)} className={`rounded px-3 py-1.5 text-xs ${step === 1 ? "bg-slate-900 text-white" : "border border-slate-300"}`}>Paso 1: Plan + productos</button>
+                <button onClick={() => setStep(1)} className={`rounded px-3 py-1.5 text-xs ${step === 1 ? "bg-[var(--color-primary)] text-white" : "border border-slate-300"}`}>Paso 1: Plan + productos</button>
                 <button onClick={() => {
                   if (draftProducts.length === 0) {
                     toast.error("Antes de continuar agrega al menos un producto.");
                     return;
                   }
                   setStep(2);
-                }} className={`rounded px-3 py-1.5 text-xs ${step === 2 ? "bg-slate-900 text-white" : "border border-slate-300"}`}>Paso 2: Precios iniciales</button>
+                }} className={`rounded px-3 py-1.5 text-xs ${step === 2 ? "bg-[var(--color-primary)] text-white" : "border border-slate-300"}`}>Paso 2: Precios iniciales</button>
               </div>
             )}
 
@@ -572,7 +639,7 @@ export default function PlanesPage() {
                 {!editing && (
                   <div className="mt-3 rounded border border-slate-200 p-3">
                     <p className="text-xs font-semibold">Productos obligatorios (minimo 1)</p>
-                    <div className="mt-2 flex gap-2"><select value={draftNewItemProduct} onChange={(e) => setDraftNewItemProduct(e.target.value)} className="w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="">Producto...</option>{lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}</select><button onClick={() => { if (draftNewItemProduct && !draftProducts.includes(draftNewItemProduct)) setDraftProducts((prev) => [...prev, draftNewItemProduct]); }} className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white">Agregar</button></div>
+                    <div className="mt-2 flex gap-2"><select value={draftNewItemProduct} onChange={(e) => setDraftNewItemProduct(e.target.value)} className="w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="">Producto...</option>{lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}</select><button onClick={() => { if (draftNewItemProduct && !draftProducts.includes(draftNewItemProduct)) setDraftProducts((prev) => [...prev, draftNewItemProduct]); }} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar</button></div>
                     <ul className="mt-2 space-y-1 text-xs">{draftProducts.map((p) => <li key={p} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{productName(p)}</span><button onClick={() => setDraftProducts((prev) => prev.filter((x) => x !== p))} className="rounded bg-rose-700 px-2 py-0.5 text-white">Quitar</button></li>)}</ul>
                   </div>
                 )}
@@ -589,7 +656,7 @@ export default function PlanesPage() {
                   <label className="text-xs">Vigente desde<input type="date" value={draftPriceForm.valido_desde} onChange={(e) => setDraftPriceForm((p) => ({ ...p, valido_desde: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" /></label>
                   <label className="text-xs">Vigente hasta<input type="date" value={draftPriceForm.valido_hasta} onChange={(e) => setDraftPriceForm((p) => ({ ...p, valido_hasta: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" /></label>
                 </div>
-                <button onClick={pushDraftPrice} className="mt-2 rounded bg-slate-900 px-3 py-1.5 text-xs text-white">Agregar precio inicial</button>
+                <button onClick={pushDraftPrice} className="mt-2 rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar precio inicial</button>
                 <ul className="mt-2 space-y-1 text-xs">{draftPrices.map((dp, idx) => <li key={`${dp.moneda_id}-${dp.periodo}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{monedaName(dp.moneda_id)} | {dp.periodo} | {formatMoney(dp.valor)} | {formatDateOnly(dp.valido_desde)} - {formatDateOnly(dp.valido_hasta)}</span><button onClick={() => setDraftPrices((prev) => prev.filter((_, i) => i !== idx))} className="rounded bg-rose-700 px-2 py-0.5 text-white">Quitar</button></li>)}</ul>
 
                 <div className="mt-4 border-t border-slate-200 pt-3">
@@ -599,39 +666,38 @@ export default function PlanesPage() {
                     <label className="text-xs">Valor entero<input type="number" value={manageEntitlementForm.valor_entero} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_entero: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" disabled={entitlementType(manageEntitlementForm.entitlement_id) === "BOOLEANO"} /></label>
                     <label className="text-xs">Valor booleano<select value={manageEntitlementForm.valor_booleano} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_booleano: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" disabled={entitlementType(manageEntitlementForm.entitlement_id) !== "BOOLEANO"}><option value="">Sin definir</option><option value="true">Si</option><option value="false">No</option></select></label>
                   </div>
-                  <button onClick={pushDraftEntitlement} className="mt-2 rounded bg-slate-900 px-3 py-1.5 text-xs text-white">Agregar entitlement</button>
+                  <button onClick={pushDraftEntitlement} className="mt-2 rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar entitlement</button>
                   <ul className="mt-2 space-y-1 text-xs">{draftEntitlements.map((de, idx) => <li key={`${de.entitlement_id}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{entitlementName(de.entitlement_id)} | valor: {de.valor_entero || de.valor_booleano || "-"}</span><button onClick={() => setDraftEntitlements((prev) => prev.filter((_, i) => i !== idx))} className="rounded bg-rose-700 px-2 py-0.5 text-white">Quitar</button></li>)}</ul>
                 </div>
               </div>
             )}
 
-            <div className="mt-3 flex justify-end gap-2"><button onClick={() => setModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button><button onClick={savePlan} className="rounded bg-slate-900 px-3 py-2 text-sm text-white">Guardar</button></div>
-          </div>
-        </div>
-      )}
+            <div className="mt-3 flex justify-end gap-2"><button onClick={() => setModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button><button onClick={savePlan} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Guardar</button></div>
+      </AppModal>
 
-      {manageProductsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
-          <div className="w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
-            <h3 className="text-base font-semibold text-slate-900">Agregar producto al plan</h3>
+      <AppModal
+        open={manageProductsModal}
+        onClose={() => setManageProductsModal(false)}
+        title="Agregar producto al plan"
+      >
             <div className="mt-3 flex gap-2">
               <select value={manageNewItemProduct} onChange={(e) => setManageNewItemProduct(e.target.value)} className="w-full rounded border border-slate-300 px-2 py-1.5 text-xs">
                 <option value="">Seleccionar producto...</option>
                 {lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
               </select>
-              <button onClick={addProductToPlan} className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white">Agregar</button>
+              <button onClick={addProductToPlan} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar</button>
             </div>
             <div className="mt-3 flex justify-end">
               <button onClick={() => setManageProductsModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cerrar</button>
             </div>
-          </div>
-        </div>
-      )}
+      </AppModal>
 
-      {managePricesModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
-          <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
-            <h3 className="text-base font-semibold text-slate-900">Agregar precio al plan</h3>
+      <AppModal
+        open={managePricesModal}
+        onClose={() => setManagePricesModal(false)}
+        maxWidthClassName="max-w-2xl"
+        title="Agregar precio al plan"
+      >
             <div className="mt-3 grid gap-2 md:grid-cols-2">
               <label className="text-xs">Moneda<select value={managePriceForm.moneda_id} onChange={(e) => setManagePriceForm((p) => ({ ...p, moneda_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="">Moneda...</option>{lookups.monedas.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}</select></label>
               <label className="text-xs">Periodo<select value={managePriceForm.periodo} onChange={(e) => setManagePriceForm((p) => ({ ...p, periodo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option></select></label>
@@ -641,16 +707,16 @@ export default function PlanesPage() {
             </div>
             <div className="mt-3 flex justify-end gap-2">
               <button onClick={() => setManagePricesModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-              <button onClick={addPrice} className="rounded bg-slate-900 px-3 py-2 text-sm text-white">Agregar precio</button>
+              <button onClick={addPrice} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Agregar precio</button>
             </div>
-          </div>
-        </div>
-      )}
+      </AppModal>
 
-      {manageEntitlementsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
-          <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
-            <h3 className="text-base font-semibold text-slate-900">Agregar entitlement al plan</h3>
+      <AppModal
+        open={manageEntitlementsModal}
+        onClose={() => setManageEntitlementsModal(false)}
+        maxWidthClassName="max-w-2xl"
+        title="Agregar entitlement al plan"
+      >
             <div className="mt-3 grid gap-2 md:grid-cols-3">
               <label className="text-xs">Entitlement<select value={manageEntitlementForm.entitlement_id} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, entitlement_id: e.target.value, valor_booleano: "", valor_entero: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="">Entitlement...</option>{lookups.entitlements.map((e) => <option key={e.value} value={e.value}>{e.label}</option>)}</select></label>
               <label className="text-xs">Valor entero<input type="number" value={manageEntitlementForm.valor_entero} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_entero: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" disabled={entitlementType(manageEntitlementForm.entitlement_id) === "BOOLEANO"} /></label>
@@ -658,12 +724,9 @@ export default function PlanesPage() {
             </div>
             <div className="mt-3 flex justify-end gap-2">
               <button onClick={() => setManageEntitlementsModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-              <button onClick={addPlanEntitlement} className="rounded bg-slate-900 px-3 py-2 text-sm text-white">Agregar entitlement</button>
+              <button onClick={addPlanEntitlement} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Agregar entitlement</button>
             </div>
-          </div>
-        </div>
-      )}
+      </AppModal>
     </main>
   );
 }
-

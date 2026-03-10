@@ -53,8 +53,7 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
 
   const orderedRows = useMemo(() => [...rows], [rows]);
 
-  const tableColumns: DataTableColumn<Row>[] = useMemo(() => {
-    const base: DataTableColumn<Row>[] = [
+  const tableColumns: DataTableColumn<Row>[] = [
       {
         key: "__index",
         header: "#",
@@ -78,13 +77,13 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
           <div className="flex gap-1.5">
             <button
               onClick={() => openEdit(row)}
-              className="rounded bg-slate-800 px-2 py-1 text-[11px] text-white"
+              className="ui-btn ui-btn-secondary ui-btn-sm"
             >
               Editar
             </button>
             <button
               onClick={() => remove(row)}
-              className="rounded bg-rose-700 px-2 py-1 text-[11px] text-white"
+              className="ui-btn ui-btn-danger ui-btn-sm"
             >
               Eliminar
             </button>
@@ -92,8 +91,6 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
         ),
       },
     ];
-    return base;
-  }, [columns]);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -177,7 +174,7 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
     <section className="space-y-3 rounded-2xl border border-slate-200 bg-white w-full p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-        <button onClick={openCreate} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs font-semibold text-white">Nuevo</button>
+        <button onClick={openCreate} className="ui-btn ui-btn-primary ui-btn-sm">Nuevo</button>
       </div>
       <DataTable
         columns={tableColumns}
@@ -195,8 +192,8 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
         description="Completa los campos y guarda los cambios para actualizar el registro."
         footer={(
           <div className="flex justify-end gap-2">
-            <button onClick={() => setModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-            <button onClick={save} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Guardar</button>
+            <button onClick={() => setModalOpen(false)} className="ui-btn ui-btn-outline">Cancelar</button>
+            <button onClick={save} className="ui-btn ui-btn-primary">Guardar</button>
           </div>
         )}
       >
@@ -205,12 +202,12 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
             <label key={f.key} className="text-xs text-slate-700">
               {f.label}
               {f.type === "select" ? (
-                <select value={form[f.key] ?? ""} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-sm">
+                <select value={form[f.key] ?? ""} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} className="mt-1 ui-input">
                   <option value="">Seleccionar...</option>
                   {(f.options ?? []).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
               ) : (
-                <input type={f.type ?? "text"} value={form[f.key] ?? ""} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-sm" />
+                <input type={f.type ?? "text"} value={form[f.key] ?? ""} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} className="mt-1 ui-input" />
               )}
             </label>
           ))}

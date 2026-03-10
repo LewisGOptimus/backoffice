@@ -514,9 +514,9 @@ export default function SuscripcionesPage() {
     <div className="mt-2 rounded border border-slate-200 p-3">
       <p className="text-xs font-semibold">Flujo guiado item: Producto - Precio - Cantidad - Vigencia</p>
       <div className="mt-2 grid gap-2 md:grid-cols-2">
-        <label className="text-xs">1. Producto<select value={draft.producto_id} onChange={(e) => setDraft((p) => ({ ...p, producto_id: e.target.value, precio_id: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Producto...</option>{lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}</select></label>
-        <label className="text-xs">2. Precio ({draftProduct?.es_consumible ? "obligatorio" : "opcional"})<select value={draft.precio_id} onChange={(e) => setDraft((p) => ({ ...p, precio_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" disabled={!draft.producto_id}><option value="">Seleccionar precio...</option>{availableDraftPrices.map((pr) => <option key={pr.id} value={pr.id}>{`${pr.periodo} | ${formatMoney(pr.valor)} | ${formatDateOnly(pr.valido_desde)} - ${formatDateOnly(pr.valido_hasta)}`}</option>)}</select></label>
-        <label className="text-xs">3. Cantidad<input type="number" value={draft.cantidad} onChange={(e) => setDraft((p) => ({ ...p, cantidad: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
+        <label className="text-xs">1. Producto<select value={draft.producto_id} onChange={(e) => setDraft((p) => ({ ...p, producto_id: e.target.value, precio_id: "" }))} className="mt-1 ui-input"><option value="">Producto...</option>{lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}</select></label>
+        <label className="text-xs">2. Precio ({draftProduct?.es_consumible ? "obligatorio" : "opcional"})<select value={draft.precio_id} onChange={(e) => setDraft((p) => ({ ...p, precio_id: e.target.value }))} className="mt-1 ui-input" disabled={!draft.producto_id}><option value="">Seleccionar precio...</option>{availableDraftPrices.map((pr) => <option key={pr.id} value={pr.id}>{`${pr.periodo} | ${formatMoney(pr.valor)} | ${formatDateOnly(pr.valido_desde)} - ${formatDateOnly(pr.valido_hasta)}`}</option>)}</select></label>
+        <label className="text-xs">3. Cantidad<input type="number" value={draft.cantidad} onChange={(e) => setDraft((p) => ({ ...p, cantidad: e.target.value }))} className="mt-1 ui-input" /></label>
         <div className="md:col-span-2 border-t border-slate-200 pt-2">
           <p className="text-[11px] text-slate-600">Fechas (guia rapida)</p>
           <ul className="mt-1 list-disc pl-4 text-[11px] text-slate-600">
@@ -525,10 +525,10 @@ export default function SuscripcionesPage() {
             <li>Cuando vendes un servicio con validez fija independiente del cobro, separa pago y vigencia efectiva. Ejemplo: certificado pagado hoy que entra en vigencia la proxima semana.</li>
           </ul>
         </div>
-        <label className="text-xs">4. Fecha inicio (pago)<input type="date" value={draft.fecha_inicio} onChange={(e) => setDraft((p) => ({ ...p, fecha_inicio: e.target.value, precio_id: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-        <label className="text-xs">Vigencia fin (pago)<input type="date" value={draft.fecha_fin} onChange={(e) => setDraft((p) => ({ ...p, fecha_fin: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-        <label className="text-xs">Vigencia efectiva inicio<input type="date" value={draft.fecha_efectiva_inicio} onChange={(e) => setDraft((p) => ({ ...p, fecha_efectiva_inicio: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-        <label className="text-xs">Vigencia efectiva fin<input type="date" value={draft.fecha_efectiva_fin} onChange={(e) => setDraft((p) => ({ ...p, fecha_efectiva_fin: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
+        <label className="text-xs">4. Fecha inicio (pago)<input type="date" value={draft.fecha_inicio} onChange={(e) => setDraft((p) => ({ ...p, fecha_inicio: e.target.value, precio_id: "" }))} className="mt-1 ui-input" /></label>
+        <label className="text-xs">Vigencia fin (pago)<input type="date" value={draft.fecha_fin} onChange={(e) => setDraft((p) => ({ ...p, fecha_fin: e.target.value }))} className="mt-1 ui-input" /></label>
+        <label className="text-xs">Vigencia efectiva inicio<input type="date" value={draft.fecha_efectiva_inicio} onChange={(e) => setDraft((p) => ({ ...p, fecha_efectiva_inicio: e.target.value }))} className="mt-1 ui-input" /></label>
+        <label className="text-xs">Vigencia efectiva fin<input type="date" value={draft.fecha_efectiva_fin} onChange={(e) => setDraft((p) => ({ ...p, fecha_efectiva_fin: e.target.value }))} className="mt-1 ui-input" /></label>
       </div>
       {draft.producto_id && availableDraftPrices.length === 0 && <p className="mt-2 text-xs text-amber-700">No hay precios vigentes para este producto en la fecha seleccionada.</p>}
       {draftProduct?.es_consumible && <p className="mt-1 text-xs text-slate-600">Para consumibles, `precio_id` es obligatorio y se valida por vigencia.</p>}
@@ -549,17 +549,17 @@ export default function SuscripcionesPage() {
           {autoInvoiceOnAddItem && (
             <div className="grid gap-2 md:grid-cols-3">
               <label className="text-xs">Tipo descuento
-                <select value={addItemDiscount.tipo} onChange={(e) => setAddItemDiscount((p) => ({ ...p, tipo: e.target.value as DiscountDraft["tipo"] }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5">
+                <select value={addItemDiscount.tipo} onChange={(e) => setAddItemDiscount((p) => ({ ...p, tipo: e.target.value as DiscountDraft["tipo"] }))} className="mt-1 ui-input">
                   <option value="">Sin descuento</option>
                   <option value="PERCENT">Porcentaje</option>
                   <option value="FIXED">Monto fijo</option>
                 </select>
               </label>
               <label className="text-xs">Valor descuento
-                <input type="number" value={addItemDiscount.valor} onChange={(e) => setAddItemDiscount((p) => ({ ...p, valor: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" />
+                <input type="number" value={addItemDiscount.valor} onChange={(e) => setAddItemDiscount((p) => ({ ...p, valor: e.target.value }))} className="mt-1 ui-input" />
               </label>
               <label className="text-xs">Motivo
-                <input type="text" value={addItemDiscount.motivo} onChange={(e) => setAddItemDiscount((p) => ({ ...p, motivo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" />
+                <input type="text" value={addItemDiscount.motivo} onChange={(e) => setAddItemDiscount((p) => ({ ...p, motivo: e.target.value }))} className="mt-1 ui-input" />
               </label>
             </div>
           )}
@@ -574,7 +574,7 @@ export default function SuscripcionesPage() {
       <button
         onClick={mode === "existing" ? addItemExisting : addDraftItem}
         disabled={mode === "existing" && autoInvoiceOnAddItem && !selectedDraftPrice}
-        className="mt-3 rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white disabled:opacity-50"
+        className="mt-3 ui-btn ui-btn-primary ui-btn-sm disabled:opacity-50"
       >
         {mode === "existing" ? "Agregar item a suscripcion" : "Agregar item manual"}
       </button>
@@ -586,7 +586,7 @@ export default function SuscripcionesPage() {
       <PageHeaderCard title="Suscripciones" description="Aquí se gestionan las suscripciones">
         <button
           onClick={openCreate}
-          className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs font-semibold text-white"
+          className="ui-btn ui-btn-primary ui-btn-sm"
         >
           Nueva suscripcion
         </button>
@@ -648,19 +648,19 @@ export default function SuscripcionesPage() {
                 <div className="flex gap-1">
                   <button
                     onClick={() => setSelected(String((r as any).id))}
-                    className="rounded border border-slate-300 px-2 py-1"
+                    className="ui-btn ui-btn-outline ui-btn-sm"
                   >
                     Items
                   </button>
                   <button
                     onClick={() => openEdit(r)}
-                    className="rounded bg-slate-800 px-2 py-1 text-white"
+                    className="ui-btn ui-btn-secondary ui-btn-sm"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => remove(String((r as any).id))}
-                    className="rounded bg-rose-700 px-2 py-1 text-white"
+                    className="ui-btn ui-btn-danger ui-btn-sm"
                   >
                     Eliminar
                   </button>
@@ -671,7 +671,7 @@ export default function SuscripcionesPage() {
         />
       </section>
 
-      {selected && <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div className="flex items-center justify-between"><h3 className="font-semibold">Items de suscripcion</h3><button onClick={() => { setAutoInvoiceOnAddItem(true); setAddItemDiscount(EMPTY_DISCOUNT); setAddItemModalOpen(true); }} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar item</button></div><div className="max-h-64 overflow-auto rounded border border-slate-200"><table className="min-w-full text-xs"><thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left">Producto</th><th className="px-2 py-2 text-left">Precio</th><th className="px-2 py-2 text-left">Cantidad</th><th className="px-2 py-2 text-left">Pago</th><th className="px-2 py-2 text-left">Efectivo</th><th className="px-2 py-2 text-left">Estado</th><th className="px-2 py-2 text-left">Acciones</th></tr></thead><tbody>{selectedItems.map((it) => <tr key={String(it.id)} className="border-t border-slate-100"><td className="px-2 py-2">{productLabel(String(it.producto_id))}</td><td className="px-2 py-2">{it.precio_id ? priceLabel(String(it.precio_id)) : "-"}</td><td className="px-2 py-2">{String(it.cantidad)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_inicio)} - {formatDateOnly(it.fecha_fin)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_efectiva_inicio)} - {formatDateOnly(it.fecha_efectiva_fin)}</td><td className="px-2 py-2">{badge(String(it.estado))}</td><td className="px-2 py-2"><div className="flex gap-1"><button onClick={() => openEditItem(it)} className="rounded bg-slate-800 px-2 py-1 text-white">Editar</button><button onClick={() => finalizeItem(String(it.id))} className="rounded bg-amber-700 px-2 py-1 text-white">Finalizar</button><button onClick={() => removeItem(String(it.id))} className="rounded bg-rose-700 px-2 py-1 text-white">Eliminar</button></div></td></tr>)}</tbody></table></div>
+      {selected && <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div className="flex items-center justify-between"><h3 className="font-semibold">Items de suscripcion</h3><button onClick={() => { setAutoInvoiceOnAddItem(true); setAddItemDiscount(EMPTY_DISCOUNT); setAddItemModalOpen(true); }} className="ui-btn ui-btn-primary ui-btn-sm">Agregar item</button></div><div className="max-h-64 overflow-auto rounded border border-slate-200"><table className="min-w-full text-xs"><thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left">Producto</th><th className="px-2 py-2 text-left">Precio</th><th className="px-2 py-2 text-left">Cantidad</th><th className="px-2 py-2 text-left">Pago</th><th className="px-2 py-2 text-left">Efectivo</th><th className="px-2 py-2 text-left">Estado</th><th className="px-2 py-2 text-left">Acciones</th></tr></thead><tbody>{selectedItems.map((it) => <tr key={String(it.id)} className="border-t border-slate-100"><td className="px-2 py-2">{productLabel(String(it.producto_id))}</td><td className="px-2 py-2">{it.precio_id ? priceLabel(String(it.precio_id)) : "-"}</td><td className="px-2 py-2">{String(it.cantidad)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_inicio)} - {formatDateOnly(it.fecha_fin)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_efectiva_inicio)} - {formatDateOnly(it.fecha_efectiva_fin)}</td><td className="px-2 py-2">{badge(String(it.estado))}</td><td className="px-2 py-2"><div className="flex gap-1"><button onClick={() => openEditItem(it)} className="ui-btn ui-btn-secondary ui-btn-sm">Editar</button><button onClick={() => finalizeItem(String(it.id))} className="ui-btn ui-btn-secondary ui-btn-sm">Finalizar</button><button onClick={() => removeItem(String(it.id))} className="ui-btn ui-btn-danger ui-btn-sm">Eliminar</button></div></td></tr>)}</tbody></table></div>
 
       <div className="rounded border border-slate-200 p-3">
         <h4 className="font-semibold text-slate-900">Entitlements vigentes</h4>
@@ -721,31 +721,31 @@ export default function SuscripcionesPage() {
         title={editing ? "Editar suscripcion" : "Nueva suscripcion"}
       >
             <div className="mt-3 grid gap-2 md:grid-cols-2">
-              <label className="text-xs">Empresa<select value={form.empresa_id} onChange={(e) => setForm((p) => ({ ...p, empresa_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Empresa...</option>{lookups.empresas.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}</select></label>
-              <label className="text-xs">Plan<select value={form.plan_id} onChange={(e) => setForm((p) => ({ ...p, plan_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Plan...</option>{lookups.planes.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}</select></label>
-              <label className="text-xs">Ciclo de cobro<select value={form.billing_cycle} onChange={(e) => setForm((p) => ({ ...p, billing_cycle: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option></select></label>
-              <label className="text-xs">Modo renovacion<select value={form.modo_renovacion} onChange={(e) => setForm((p) => ({ ...p, modo_renovacion: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="MANUAL">MANUAL</option><option value="AUTOMATICA">AUTOMATICA</option></select></label>
-              <label className="text-xs">Fecha inicio<input type="date" value={form.fecha_inicio} onChange={(e) => { const v = e.target.value; setForm((p) => ({ ...p, fecha_inicio: v })); setDraft((p) => ({ ...p, fecha_inicio: v })); }} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
+              <label className="text-xs">Empresa<select value={form.empresa_id} onChange={(e) => setForm((p) => ({ ...p, empresa_id: e.target.value }))} className="mt-1 ui-input"><option value="">Empresa...</option>{lookups.empresas.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}</select></label>
+              <label className="text-xs">Plan<select value={form.plan_id} onChange={(e) => setForm((p) => ({ ...p, plan_id: e.target.value }))} className="mt-1 ui-input"><option value="">Plan...</option>{lookups.planes.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}</select></label>
+              <label className="text-xs">Ciclo de cobro<select value={form.billing_cycle} onChange={(e) => setForm((p) => ({ ...p, billing_cycle: e.target.value }))} className="mt-1 ui-input"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option></select></label>
+              <label className="text-xs">Modo renovacion<select value={form.modo_renovacion} onChange={(e) => setForm((p) => ({ ...p, modo_renovacion: e.target.value }))} className="mt-1 ui-input"><option value="MANUAL">MANUAL</option><option value="AUTOMATICA">AUTOMATICA</option></select></label>
+              <label className="text-xs">Fecha inicio<input type="date" value={form.fecha_inicio} onChange={(e) => { const v = e.target.value; setForm((p) => ({ ...p, fecha_inicio: v })); setDraft((p) => ({ ...p, fecha_inicio: v })); }} className="mt-1 ui-input" /></label>
               {editing ? (
-                <label className="text-xs">Estado<select value={form.estado} onChange={(e) => setForm((p) => ({ ...p, estado: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="ACTIVA">ACTIVA</option><option value="PAUSADA">PAUSADA</option><option value="CANCELADA">CANCELADA</option><option value="EXPIRADA">EXPIRADA</option></select></label>
+                <label className="text-xs">Estado<select value={form.estado} onChange={(e) => setForm((p) => ({ ...p, estado: e.target.value }))} className="mt-1 ui-input"><option value="ACTIVA">ACTIVA</option><option value="PAUSADA">PAUSADA</option><option value="CANCELADA">CANCELADA</option><option value="EXPIRADA">EXPIRADA</option></select></label>
               ) : (
-                <label className="text-xs">Generar factura<select value={form.generar_factura} onChange={(e) => setForm((p) => ({ ...p, generar_factura: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="false">No</option><option value="true">Si (EMITIDA)</option></select></label>
+                <label className="text-xs">Generar factura<select value={form.generar_factura} onChange={(e) => setForm((p) => ({ ...p, generar_factura: e.target.value }))} className="mt-1 ui-input"><option value="false">No</option><option value="true">Si (EMITIDA)</option></select></label>
               )}
             </div>
-            {editing && <div className="mt-3 rounded border border-slate-200 p-3"><p className="text-xs font-semibold">Prorroga de servicio</p><div className="mt-2 grid gap-2 md:grid-cols-2"><label className="text-xs">Estado operativo<select value={form.operational_status} onChange={(e) => setForm((p) => ({ ...p, operational_status: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="EN_SERVICIO">EN_SERVICIO</option><option value="EN_PRORROGA">EN_PRORROGA</option></select></label><label className="text-xs">Dias de prorroga<input type="number" min="0" value={form.grace_days_granted} onChange={(e) => setForm((p) => ({ ...p, grace_days_granted: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label></div><p className="mt-2 text-[11px] text-slate-600">Se cuentan desde el fin del ciclo actual antes del bloqueo total.</p></div>}
+            {editing && <div className="mt-3 rounded border border-slate-200 p-3"><p className="text-xs font-semibold">Prorroga de servicio</p><div className="mt-2 grid gap-2 md:grid-cols-2"><label className="text-xs">Estado operativo<select value={form.operational_status} onChange={(e) => setForm((p) => ({ ...p, operational_status: e.target.value }))} className="mt-1 ui-input"><option value="EN_SERVICIO">EN_SERVICIO</option><option value="EN_PRORROGA">EN_PRORROGA</option></select></label><label className="text-xs">Dias de prorroga<input type="number" min="0" value={form.grace_days_granted} onChange={(e) => setForm((p) => ({ ...p, grace_days_granted: e.target.value }))} className="mt-1 ui-input" /></label></div><p className="mt-2 text-[11px] text-slate-600">Se cuentan desde el fin del ciclo actual antes del bloqueo total.</p></div>}
             {!editing && form.generar_factura === "true" && (
               <div className="mt-3 rounded border border-slate-200 p-3">
                 <p className="text-xs font-semibold">Descuento de factura (suscripcion base)</p>
                 <div className="mt-2 grid gap-2 md:grid-cols-3">
                   <label className="text-xs">Tipo descuento
-                    <select value={createDiscount.tipo} onChange={(e) => setCreateDiscount((p) => ({ ...p, tipo: e.target.value as DiscountDraft["tipo"] }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5">
+                    <select value={createDiscount.tipo} onChange={(e) => setCreateDiscount((p) => ({ ...p, tipo: e.target.value as DiscountDraft["tipo"] }))} className="mt-1 ui-input">
                       <option value="">Sin descuento</option>
                       <option value="PERCENT">Porcentaje</option>
                       <option value="FIXED">Monto fijo</option>
                     </select>
                   </label>
-                  <label className="text-xs">Valor descuento<input type="number" value={createDiscount.valor} onChange={(e) => setCreateDiscount((p) => ({ ...p, valor: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-                  <label className="text-xs">Motivo<input type="text" value={createDiscount.motivo} onChange={(e) => setCreateDiscount((p) => ({ ...p, motivo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
+                  <label className="text-xs">Valor descuento<input type="number" value={createDiscount.valor} onChange={(e) => setCreateDiscount((p) => ({ ...p, valor: e.target.value }))} className="mt-1 ui-input" /></label>
+                  <label className="text-xs">Motivo<input type="text" value={createDiscount.motivo} onChange={(e) => setCreateDiscount((p) => ({ ...p, motivo: e.target.value }))} className="mt-1 ui-input" /></label>
                 </div>
                 <p className="mt-2 text-xs text-slate-600">Subtotal: {formatMoney(createInvoicePreview.subtotal)} | Descuento: {formatMoney(createInvoicePreview.discount)} | Neto: {formatMoney(createInvoicePreview.total)}</p>
               </div>
@@ -755,13 +755,13 @@ export default function SuscripcionesPage() {
                 <p className="text-xs font-semibold">Items manuales opcionales</p>
                 {renderGuidedItemBuilder("draft")}
                 <ul className="mt-2 space-y-1 text-xs">
-                  {draftItems.map((d, idx) => <li key={`${d.producto_id}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{productLabel(d.producto_id)} | precio {d.precio_id ? priceLabel(d.precio_id) : "-"} | cant {d.cantidad} | pago {d.fecha_inicio || form.fecha_inicio}</span><button onClick={() => setDraftItems((prev) => prev.filter((_, i) => i !== idx))} className="rounded bg-rose-700 px-2 py-0.5 text-white">Quitar</button></li>)}
+                  {draftItems.map((d, idx) => <li key={`${d.producto_id}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{productLabel(d.producto_id)} | precio {d.precio_id ? priceLabel(d.precio_id) : "-"} | cant {d.cantidad} | pago {d.fecha_inicio || form.fecha_inicio}</span><button onClick={() => setDraftItems((prev) => prev.filter((_, i) => i !== idx))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}
                 </ul>
               </div>
             )}
             <div className="mt-3 flex justify-end gap-2">
-              <button onClick={() => setModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-              <button onClick={save} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Guardar</button>
+              <button onClick={() => setModal(false)} className="ui-btn ui-btn-outline">Cancelar</button>
+              <button onClick={save} className="ui-btn ui-btn-primary">Guardar</button>
             </div>
       </AppModal>
 
@@ -772,18 +772,18 @@ export default function SuscripcionesPage() {
         title="Editar item de suscripcion"
       >
         <div className="mt-3 grid gap-2 md:grid-cols-2">
-          <label className="text-xs">Producto<select value={itemForm.producto_id} onChange={(e) => setItemForm((p) => ({ ...p, producto_id: e.target.value, precio_id: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Producto...</option>{lookups.productos.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}</select></label>
-          <label className="text-xs">Precio ({editingItemProduct?.es_consumible ? "obligatorio" : "opcional"})<select value={itemForm.precio_id} onChange={(e) => setItemForm((p) => ({ ...p, precio_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Precio...</option>{availableEditPrices.map((pr) => <option key={pr.id} value={pr.id}>{`${pr.periodo} | ${formatMoney(pr.valor)} | ${formatDateOnly(pr.valido_desde)} - ${formatDateOnly(pr.valido_hasta)}`}</option>)}</select></label>
-          <label className="text-xs">Cantidad<input type="number" value={itemForm.cantidad} onChange={(e) => setItemForm((p) => ({ ...p, cantidad: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-          <label className="text-xs">Fecha inicio<input type="date" value={itemForm.fecha_inicio} onChange={(e) => setItemForm((p) => ({ ...p, fecha_inicio: e.target.value, precio_id: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-          <label className="text-xs">Fecha fin<input type="date" value={itemForm.fecha_fin} onChange={(e) => setItemForm((p) => ({ ...p, fecha_fin: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-          <label className="text-xs">Efectiva inicio<input type="date" value={itemForm.fecha_efectiva_inicio} onChange={(e) => setItemForm((p) => ({ ...p, fecha_efectiva_inicio: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-          <label className="text-xs">Efectiva fin<input type="date" value={itemForm.fecha_efectiva_fin} onChange={(e) => setItemForm((p) => ({ ...p, fecha_efectiva_fin: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
+          <label className="text-xs">Producto<select value={itemForm.producto_id} onChange={(e) => setItemForm((p) => ({ ...p, producto_id: e.target.value, precio_id: "" }))} className="mt-1 ui-input"><option value="">Producto...</option>{lookups.productos.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}</select></label>
+          <label className="text-xs">Precio ({editingItemProduct?.es_consumible ? "obligatorio" : "opcional"})<select value={itemForm.precio_id} onChange={(e) => setItemForm((p) => ({ ...p, precio_id: e.target.value }))} className="mt-1 ui-input"><option value="">Precio...</option>{availableEditPrices.map((pr) => <option key={pr.id} value={pr.id}>{`${pr.periodo} | ${formatMoney(pr.valor)} | ${formatDateOnly(pr.valido_desde)} - ${formatDateOnly(pr.valido_hasta)}`}</option>)}</select></label>
+          <label className="text-xs">Cantidad<input type="number" value={itemForm.cantidad} onChange={(e) => setItemForm((p) => ({ ...p, cantidad: e.target.value }))} className="mt-1 ui-input" /></label>
+          <label className="text-xs">Fecha inicio<input type="date" value={itemForm.fecha_inicio} onChange={(e) => setItemForm((p) => ({ ...p, fecha_inicio: e.target.value, precio_id: "" }))} className="mt-1 ui-input" /></label>
+          <label className="text-xs">Fecha fin<input type="date" value={itemForm.fecha_fin} onChange={(e) => setItemForm((p) => ({ ...p, fecha_fin: e.target.value }))} className="mt-1 ui-input" /></label>
+          <label className="text-xs">Efectiva inicio<input type="date" value={itemForm.fecha_efectiva_inicio} onChange={(e) => setItemForm((p) => ({ ...p, fecha_efectiva_inicio: e.target.value }))} className="mt-1 ui-input" /></label>
+          <label className="text-xs">Efectiva fin<input type="date" value={itemForm.fecha_efectiva_fin} onChange={(e) => setItemForm((p) => ({ ...p, fecha_efectiva_fin: e.target.value }))} className="mt-1 ui-input" /></label>
         </div>
         <p className="mt-2 text-xs text-slate-600">Para consumibles, el precio es obligatorio y debe estar vigente para la fecha de inicio.</p>
         <div className="mt-3 flex justify-end gap-2">
-          <button onClick={() => setItemModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-          <button onClick={saveItemEdit} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Guardar cambios</button>
+          <button onClick={() => setItemModalOpen(false)} className="ui-btn ui-btn-outline">Cancelar</button>
+          <button onClick={saveItemEdit} className="ui-btn ui-btn-primary">Guardar cambios</button>
         </div>
       </AppModal>
 
@@ -795,7 +795,7 @@ export default function SuscripcionesPage() {
       >
         {renderGuidedItemBuilder("existing")}
         <div className="mt-3 flex justify-end">
-          <button onClick={() => setAddItemModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cerrar</button>
+          <button onClick={() => setAddItemModalOpen(false)} className="ui-btn ui-btn-outline">Cerrar</button>
         </div>
       </AppModal>
     </main>

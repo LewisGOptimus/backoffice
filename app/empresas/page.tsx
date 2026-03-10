@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { fetchJson, isSuccess } from "@/lib/client/api";
@@ -221,7 +221,7 @@ export default function EmpresasPage() {
         title="Empresas"
         description="Empresas de la aplicación."
       >
-        <button onClick={openCreate} className="rounded bg-[var(--color-primary)]	 px-3 py-1.5 text-sm font-semibold text-white">Nueva</button>
+        <button onClick={openCreate} className="ui-btn ui-btn-primary ui-btn-sm">Nueva</button>
       </PageHeaderCard>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

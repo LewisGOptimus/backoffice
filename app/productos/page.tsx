@@ -367,7 +367,7 @@ export default function ProductosPage() {
         title="Productos"
         description="Productos de la aplicación."
       >
-        <button onClick={openCreate} className="rounded bg-[var(--color-primary)]	 px-3 py-1.5 text-sm font-semibold text-white">Nuevo producto</button>
+        <button onClick={openCreate} className="ui-btn ui-btn-primary ui-btn-sm">Nuevo producto</button>
       </PageHeaderCard>
 
 
@@ -427,19 +427,19 @@ export default function ProductosPage() {
                 <div className="flex gap-1">
                   <button
                     onClick={() => setSelectedProductId(row.id)}
-                    className="rounded border border-slate-300 px-2 py-1"
+                    className="ui-btn ui-btn-outline ui-btn-sm"
                   >
                     Gestionar
                   </button>
                   <button
                     onClick={() => openEdit(row)}
-                    className="rounded bg-slate-800 px-2 py-1 text-white"
+                    className="ui-btn ui-btn-secondary ui-btn-sm"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => deleteProduct(row.id)}
-                    className="rounded bg-rose-700 px-2 py-1 text-white"
+                    className="ui-btn ui-btn-danger ui-btn-sm"
                   >
                     Eliminar
                   </button>
@@ -476,7 +476,7 @@ export default function ProductosPage() {
               <div className="flex gap-1 items-center">
                 <Badge text={productoSeleccionado.tipo} />
                 {productoSeleccionado.tipo === "SERVICIO" && <Badge text="PRORRATEO CONFIGURABLE" />}
-                <button onClick={() => setManagePricesModalOpen(true)} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar precio</button>
+                <button onClick={() => setManagePricesModalOpen(true)} className="ui-btn ui-btn-primary ui-btn-sm">Agregar precio</button>
               </div>
             </div>
             {productoSeleccionado.tipo === "CONSUMIBLE" && <p className="mt-2 text-xs text-slate-600">Para consumibles usa un precio activo y vigente para habilitar su venta y consumo en suscripciones.</p>}
@@ -490,8 +490,8 @@ export default function ProductosPage() {
                     <Badge text={pr.permite_prorrateo ? "PRORRATEA" : "SIN PRORRATEO"} />
                   </div>
                   <div className="mt-2 flex gap-2">
-                    <button onClick={() => invalidatePrice(pr.id)} className="rounded bg-amber-700 px-2 py-1 text-[11px] text-white">Invalidar hoy</button>
-                    <button onClick={() => deletePrice(pr.id)} className="rounded bg-rose-700 px-2 py-1 text-[11px] text-white">Eliminar</button>
+                    <button onClick={() => invalidatePrice(pr.id)} className="ui-btn ui-btn-secondary ui-btn-sm">Invalidar hoy</button>
+                    <button onClick={() => deletePrice(pr.id)} className="ui-btn ui-btn-danger ui-btn-sm">Eliminar</button>
                   </div>
                 </li>
               ))}
@@ -510,13 +510,13 @@ export default function ProductosPage() {
         title={editingId ? "Editar producto" : "Nuevo producto"}
       >
             <div className="mt-3 grid gap-2 md:grid-cols-2">
-              <label className="text-xs">Codigo<input value={productForm.codigo} onChange={(e) => setProductForm((p) => ({ ...p, codigo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-              <label className="text-xs">Nombre<input value={productForm.nombre} onChange={(e) => setProductForm((p) => ({ ...p, nombre: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-              <label className="text-xs">Descripcion<input value={productForm.descripcion} onChange={(e) => setProductForm((p) => ({ ...p, descripcion: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-              <label className="text-xs">Tipo<select value={productForm.tipo} onChange={(e) => { const nextType = e.target.value as ProductType; setProductForm((p) => ({ ...p, tipo: nextType, es_consumible: nextType === "CONSUMIBLE" ? "true" : p.es_consumible, unidad_consumo: nextType === "CONSUMIBLE" ? p.unidad_consumo : "", descripcion_operativa: nextType === "CONSUMIBLE" ? p.descripcion_operativa : "" })); if (nextType !== "CONSUMIBLE") { setUnitMode("SELECT"); setCustomUnit(""); } }} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="SOFTWARE">SOFTWARE</option><option value="MODULO">MODULO</option><option value="ADDON">ADDON</option><option value="CONSUMIBLE">CONSUMIBLE</option><option value="SERVICIO">SERVICIO</option></select></label>
-              <label className="text-xs">Alcance<select value={productForm.alcance} onChange={(e) => setProductForm((p) => ({ ...p, alcance: e.target.value as ScopeType }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="EMPRESA">EMPRESA</option><option value="USUARIO">USUARIO</option><option value="GLOBAL">GLOBAL</option></select></label>
-              <label className="text-xs">Es consumible<select disabled={productForm.tipo === "CONSUMIBLE"} value={productForm.tipo === "CONSUMIBLE" ? "true" : productForm.es_consumible} onChange={(e) => setProductForm((p) => ({ ...p, es_consumible: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="true">Si</option><option value="false">No</option></select></label>
-              <label className="text-xs">Estado<select value={productForm.activo} onChange={(e) => setProductForm((p) => ({ ...p, activo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="true">Activo</option><option value="false">Inactivo</option></select></label>
+              <label className="text-xs">Codigo<input value={productForm.codigo} onChange={(e) => setProductForm((p) => ({ ...p, codigo: e.target.value }))} className="mt-1 ui-input" /></label>
+              <label className="text-xs">Nombre<input value={productForm.nombre} onChange={(e) => setProductForm((p) => ({ ...p, nombre: e.target.value }))} className="mt-1 ui-input" /></label>
+              <label className="text-xs">Descripcion<input value={productForm.descripcion} onChange={(e) => setProductForm((p) => ({ ...p, descripcion: e.target.value }))} className="mt-1 ui-input" /></label>
+              <label className="text-xs">Tipo<select value={productForm.tipo} onChange={(e) => { const nextType = e.target.value as ProductType; setProductForm((p) => ({ ...p, tipo: nextType, es_consumible: nextType === "CONSUMIBLE" ? "true" : p.es_consumible, unidad_consumo: nextType === "CONSUMIBLE" ? p.unidad_consumo : "", descripcion_operativa: nextType === "CONSUMIBLE" ? p.descripcion_operativa : "" })); if (nextType !== "CONSUMIBLE") { setUnitMode("SELECT"); setCustomUnit(""); } }} className="mt-1 ui-input"><option value="SOFTWARE">SOFTWARE</option><option value="MODULO">MODULO</option><option value="ADDON">ADDON</option><option value="CONSUMIBLE">CONSUMIBLE</option><option value="SERVICIO">SERVICIO</option></select></label>
+              <label className="text-xs">Alcance<select value={productForm.alcance} onChange={(e) => setProductForm((p) => ({ ...p, alcance: e.target.value as ScopeType }))} className="mt-1 ui-input"><option value="EMPRESA">EMPRESA</option><option value="USUARIO">USUARIO</option><option value="GLOBAL">GLOBAL</option></select></label>
+              <label className="text-xs">Es consumible<select disabled={productForm.tipo === "CONSUMIBLE"} value={productForm.tipo === "CONSUMIBLE" ? "true" : productForm.es_consumible} onChange={(e) => setProductForm((p) => ({ ...p, es_consumible: e.target.value }))} className="mt-1 ui-input"><option value="true">Si</option><option value="false">No</option></select></label>
+              <label className="text-xs">Estado<select value={productForm.activo} onChange={(e) => setProductForm((p) => ({ ...p, activo: e.target.value }))} className="mt-1 ui-input"><option value="true">Activo</option><option value="false">Inactivo</option></select></label>
             </div>
 
             {productForm.tipo === "CONSUMIBLE" && (
@@ -539,7 +539,7 @@ export default function ProductosPage() {
                         setCustomUnit("");
                         setProductForm((p) => ({ ...p, unidad_consumo: value }));
                       }}
-                      className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"
+                      className="mt-1 ui-input"
                     >
                       <option value="">Seleccionar...</option>
                       {CONSUMABLE_UNIT_OPTIONS.map((unit) => (
@@ -554,7 +554,7 @@ export default function ProductosPage() {
                       <input
                         value={customUnit}
                         onChange={(e) => setCustomUnit(e.target.value)}
-                        className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"
+                        className="mt-1 ui-input"
                         placeholder="Ej: DOCUMENTO-NOMINA"
                       />
                     </label>
@@ -566,7 +566,7 @@ export default function ProductosPage() {
                     value={productForm.descripcion_operativa}
                     onChange={(e) => setProductForm((p) => ({ ...p, descripcion_operativa: e.target.value }))}
                     rows={2}
-                    className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"
+                    className="mt-1 ui-input"
                     placeholder="Como se consume este pool en operacion."
                   />
                 </label>
@@ -574,8 +574,8 @@ export default function ProductosPage() {
             )}
 
             <div className="mt-3 flex justify-end gap-2">
-              <button onClick={() => setModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-              <button onClick={saveProduct} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Guardar</button>
+              <button onClick={() => setModalOpen(false)} className="ui-btn ui-btn-outline">Cancelar</button>
+              <button onClick={saveProduct} className="ui-btn ui-btn-primary">Guardar</button>
             </div>
       </AppModal>
 
@@ -587,16 +587,16 @@ export default function ProductosPage() {
           title="Agregar precio al producto"
         >
             <div className="mt-3 grid gap-2 md:grid-cols-2">
-              <label className="text-xs">Moneda<select value={priceForm.moneda_id} onChange={(e) => setPriceForm((p) => ({ ...p, moneda_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="">Moneda...</option>{monedas.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}</select></label>
-              <label className="text-xs">Periodo<select value={priceForm.periodo} onChange={(e) => setPriceForm((p) => ({ ...p, periodo: e.target.value as PricePeriod }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option><option value="VITALICIO">VITALICIO</option><option value="UNICO">UNICO</option></select></label>
-              <label className="text-xs">Valor<input type="number" value={priceForm.valor} onChange={(e) => setPriceForm((p) => ({ ...p, valor: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-              <label className="text-xs">Permite prorrateo<select disabled={productoSeleccionado.tipo === "CONSUMIBLE"} value={productoSeleccionado.tipo === "CONSUMIBLE" ? "false" : priceForm.permite_prorrateo} onChange={(e) => setPriceForm((p) => ({ ...p, permite_prorrateo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="false">No</option><option value="true">Si</option></select></label>
-              <label className="text-xs">Vigente desde<input type="date" value={priceForm.valido_desde} onChange={(e) => setPriceForm((p) => ({ ...p, valido_desde: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-              <label className="text-xs">Vigente hasta<input type="date" value={priceForm.valido_hasta} onChange={(e) => setPriceForm((p) => ({ ...p, valido_hasta: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
+              <label className="text-xs">Moneda<select value={priceForm.moneda_id} onChange={(e) => setPriceForm((p) => ({ ...p, moneda_id: e.target.value }))} className="mt-1 ui-input"><option value="">Moneda...</option>{monedas.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}</select></label>
+              <label className="text-xs">Periodo<select value={priceForm.periodo} onChange={(e) => setPriceForm((p) => ({ ...p, periodo: e.target.value as PricePeriod }))} className="mt-1 ui-input"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option><option value="VITALICIO">VITALICIO</option><option value="UNICO">UNICO</option></select></label>
+              <label className="text-xs">Valor<input type="number" value={priceForm.valor} onChange={(e) => setPriceForm((p) => ({ ...p, valor: e.target.value }))} className="mt-1 ui-input" /></label>
+              <label className="text-xs">Permite prorrateo<select disabled={productoSeleccionado.tipo === "CONSUMIBLE"} value={productoSeleccionado.tipo === "CONSUMIBLE" ? "false" : priceForm.permite_prorrateo} onChange={(e) => setPriceForm((p) => ({ ...p, permite_prorrateo: e.target.value }))} className="mt-1 ui-input"><option value="false">No</option><option value="true">Si</option></select></label>
+              <label className="text-xs">Vigente desde<input type="date" value={priceForm.valido_desde} onChange={(e) => setPriceForm((p) => ({ ...p, valido_desde: e.target.value }))} className="mt-1 ui-input" /></label>
+              <label className="text-xs">Vigente hasta<input type="date" value={priceForm.valido_hasta} onChange={(e) => setPriceForm((p) => ({ ...p, valido_hasta: e.target.value }))} className="mt-1 ui-input" /></label>
             </div>
             <div className="mt-3 flex justify-end gap-2">
-              <button onClick={() => setManagePricesModalOpen(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-              <button onClick={addPrice} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Agregar precio</button>
+              <button onClick={() => setManagePricesModalOpen(false)} className="ui-btn ui-btn-outline">Cancelar</button>
+              <button onClick={addPrice} className="ui-btn ui-btn-primary">Agregar precio</button>
             </div>
         </AppModal>
       )}

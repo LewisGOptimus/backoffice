@@ -61,7 +61,7 @@ export default function EntitlementsPage() {
                 setMessage("Selecciona una empresa.");
               }
             }}
-            className="mt-1 w-full max-w-xl rounded border border-slate-300 px-3 py-2 text-sm"
+            className="mt-1 ui-input max-w-xl"
           >
             <option value="">Seleccionar...</option>
             {empresas.map((e) => (

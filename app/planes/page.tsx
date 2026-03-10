@@ -463,7 +463,7 @@ export default function PlanesPage() {
       <PageHeaderCard title="Planes">
         <button
           onClick={openCreate}
-          className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs font-semibold text-white"
+          className="ui-btn ui-btn-primary ui-btn-sm"
         >
           Nuevo plan
         </button>
@@ -525,19 +525,19 @@ export default function PlanesPage() {
                 <div className="flex gap-1">
                   <button
                     onClick={() => setSelectedPlan(String((row as any).id))}
-                    className="rounded border border-slate-300 px-2 py-1"
+                    className="ui-btn ui-btn-outline ui-btn-sm"
                   >
                     Gestionar
                   </button>
                   <button
                     onClick={() => openEdit(row as any)}
-                    className="rounded bg-slate-800 px-2 py-1 text-white"
+                    className="ui-btn ui-btn-secondary ui-btn-sm"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => deletePlan(String((row as any).id))}
-                    className="rounded bg-rose-700 px-2 py-1 text-white"
+                    className="ui-btn ui-btn-danger ui-btn-sm"
                   >
                     Eliminar
                   </button>
@@ -553,15 +553,15 @@ export default function PlanesPage() {
           <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-slate-900">Productos del plan</h3>
-              <button onClick={() => setManageProductsModal(true)} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar producto</button>
+              <button onClick={() => setManageProductsModal(true)} className="ui-btn ui-btn-primary ui-btn-sm">Agregar producto</button>
             </div>
-            <ul className="mt-3 space-y-2 text-xs">{itemsSelected.map((x) => <li key={`${String(x.plan_id)}-${String(x.producto_id)}`} className="flex items-center justify-between rounded border border-slate-200 p-2"><span>{productName(String(x.producto_id))}</span><button onClick={() => removeProductFromPlan(String(x.plan_id), String(x.producto_id))} className="rounded bg-rose-700 px-2 py-1 text-white">Quitar</button></li>)}</ul>
+            <ul className="mt-3 space-y-2 text-xs">{itemsSelected.map((x) => <li key={`${String(x.plan_id)}-${String(x.producto_id)}`} className="flex items-center justify-between rounded border border-slate-200 p-2"><span>{productName(String(x.producto_id))}</span><button onClick={() => removeProductFromPlan(String(x.plan_id), String(x.producto_id))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
           </article>
 
           <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-slate-900">Precios del plan</h3>
-              <button onClick={() => setManagePricesModal(true)} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar precio</button>
+              <button onClick={() => setManagePricesModal(true)} className="ui-btn ui-btn-primary ui-btn-sm">Agregar precio</button>
             </div>
             <ul className="mt-3 space-y-2 text-xs">
               {preciosSelected.map((pr) => (
@@ -569,8 +569,8 @@ export default function PlanesPage() {
                   <p>{monedaName(String(pr.moneda_id))} | {String(pr.periodo)} | {formatMoney(pr.valor)} | desde {formatDateOnly(pr.valido_desde)} hasta {formatDateOnly(pr.valido_hasta)}</p>
                   <p className="mt-1"><span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 font-semibold">{String(pr.activo)}</span></p>
                   <div className="mt-2 flex gap-2">
-                    <button onClick={() => invalidatePrice(String(pr.id))} className="rounded bg-amber-700 px-2 py-1 text-[11px] text-white">Invalidar hoy</button>
-                    <button onClick={() => deletePrice(String(pr.id))} className="rounded bg-rose-700 px-2 py-1 text-[11px] text-white">Eliminar</button>
+                    <button onClick={() => invalidatePrice(String(pr.id))} className="ui-btn ui-btn-secondary ui-btn-sm">Invalidar hoy</button>
+                    <button onClick={() => deletePrice(String(pr.id))} className="ui-btn ui-btn-danger ui-btn-sm">Eliminar</button>
                   </div>
                 </li>
               ))}
@@ -580,7 +580,7 @@ export default function PlanesPage() {
           <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-slate-900">Entitlements del plan</h3>
-              <button onClick={() => setManageEntitlementsModal(true)} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar entitlement</button>
+              <button onClick={() => setManageEntitlementsModal(true)} className="ui-btn ui-btn-primary ui-btn-sm">Agregar entitlement</button>
             </div>
             <ul className="mt-3 space-y-2 text-xs">
               {entitlementsSelected.map((ep) => (
@@ -590,7 +590,7 @@ export default function PlanesPage() {
                   </span>
                   <button
                     onClick={() => removePlanEntitlement(ep.plan_id, ep.entitlement_id)}
-                    className="rounded bg-rose-700 px-2 py-1 text-white"
+                    className="ui-btn ui-btn-danger ui-btn-sm"
                   >
                     Quitar
                   </button>
@@ -627,20 +627,20 @@ export default function PlanesPage() {
             {(editing || step === 1) && (
               <>
                 <div className="mt-3 grid gap-2 md:grid-cols-2">
-                  <label className="text-xs">Codigo<input value={form.codigo} onChange={(e) => setForm((p) => ({ ...p, codigo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-                  <label className="text-xs">Nombre<input value={form.nombre} onChange={(e) => setForm((p) => ({ ...p, nombre: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-                  <label className="text-xs">Descripcion<input value={form.descripcion} onChange={(e) => setForm((p) => ({ ...p, descripcion: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-                  <label className="text-xs">Tipo de precio<select value={form.pricing_mode} onChange={(e) => setForm((p) => ({ ...p, pricing_mode: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="BUNDLE">Precio fijo del plan</option><option value="SUM_COMPONENTS">Suma de productos</option></select></label>
-                  <label className="text-xs">Periodo<select value={form.periodo} onChange={(e) => { const value = e.target.value; setForm((p) => ({ ...p, periodo: value })); setDraftPriceForm((pp) => ({ ...pp, periodo: value })); }} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option></select></label>
-                  <label className="text-xs">Dias de prorroga<input type="number" min="0" value={form.grace_days} onChange={(e) => setForm((p) => ({ ...p, grace_days: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5" /></label>
-                  <label className="text-xs">Activo<select value={form.activo} onChange={(e) => setForm((p) => ({ ...p, activo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5"><option value="true">Activo</option><option value="false">Inactivo</option></select></label>
+                  <label className="text-xs">Codigo<input value={form.codigo} onChange={(e) => setForm((p) => ({ ...p, codigo: e.target.value }))} className="mt-1 ui-input" /></label>
+                  <label className="text-xs">Nombre<input value={form.nombre} onChange={(e) => setForm((p) => ({ ...p, nombre: e.target.value }))} className="mt-1 ui-input" /></label>
+                  <label className="text-xs">Descripcion<input value={form.descripcion} onChange={(e) => setForm((p) => ({ ...p, descripcion: e.target.value }))} className="mt-1 ui-input" /></label>
+                  <label className="text-xs">Tipo de precio<select value={form.pricing_mode} onChange={(e) => setForm((p) => ({ ...p, pricing_mode: e.target.value }))} className="mt-1 ui-input"><option value="BUNDLE">Precio fijo del plan</option><option value="SUM_COMPONENTS">Suma de productos</option></select></label>
+                  <label className="text-xs">Periodo<select value={form.periodo} onChange={(e) => { const value = e.target.value; setForm((p) => ({ ...p, periodo: value })); setDraftPriceForm((pp) => ({ ...pp, periodo: value })); }} className="mt-1 ui-input"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option></select></label>
+                  <label className="text-xs">Dias de prorroga<input type="number" min="0" value={form.grace_days} onChange={(e) => setForm((p) => ({ ...p, grace_days: e.target.value }))} className="mt-1 ui-input" /></label>
+                  <label className="text-xs">Activo<select value={form.activo} onChange={(e) => setForm((p) => ({ ...p, activo: e.target.value }))} className="mt-1 ui-input"><option value="true">Activo</option><option value="false">Inactivo</option></select></label>
                 </div>
 
                 {!editing && (
                   <div className="mt-3 rounded border border-slate-200 p-3">
                     <p className="text-xs font-semibold">Productos obligatorios (minimo 1)</p>
-                    <div className="mt-2 flex gap-2"><select value={draftNewItemProduct} onChange={(e) => setDraftNewItemProduct(e.target.value)} className="w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="">Producto...</option>{lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}</select><button onClick={() => { if (draftNewItemProduct && !draftProducts.includes(draftNewItemProduct)) setDraftProducts((prev) => [...prev, draftNewItemProduct]); }} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar</button></div>
-                    <ul className="mt-2 space-y-1 text-xs">{draftProducts.map((p) => <li key={p} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{productName(p)}</span><button onClick={() => setDraftProducts((prev) => prev.filter((x) => x !== p))} className="rounded bg-rose-700 px-2 py-0.5 text-white">Quitar</button></li>)}</ul>
+                    <div className="mt-2 flex gap-2"><select value={draftNewItemProduct} onChange={(e) => setDraftNewItemProduct(e.target.value)} className="ui-input"><option value="">Producto...</option>{lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}</select><button onClick={() => { if (draftNewItemProduct && !draftProducts.includes(draftNewItemProduct)) setDraftProducts((prev) => [...prev, draftNewItemProduct]); }} className="ui-btn ui-btn-primary ui-btn-sm">Agregar</button></div>
+                    <ul className="mt-2 space-y-1 text-xs">{draftProducts.map((p) => <li key={p} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{productName(p)}</span><button onClick={() => setDraftProducts((prev) => prev.filter((x) => x !== p))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
                   </div>
                 )}
               </>
@@ -650,29 +650,29 @@ export default function PlanesPage() {
               <div className="mt-3 rounded border border-slate-200 p-3">
                 <p className="text-xs font-semibold">Precios iniciales (minimo 1)</p>
                 <div className="mt-2 grid gap-2 md:grid-cols-2">
-                  <label className="text-xs">Moneda<select value={draftPriceForm.moneda_id} onChange={(e) => setDraftPriceForm((p) => ({ ...p, moneda_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="">Moneda...</option>{lookups.monedas.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}</select></label>
-                  <label className="text-xs">Periodo<select value={draftPriceForm.periodo} onChange={(e) => setDraftPriceForm((p) => ({ ...p, periodo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option></select></label>
-                  <label className="text-xs">Valor<input type="number" value={draftPriceForm.valor} onChange={(e) => setDraftPriceForm((p) => ({ ...p, valor: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" /></label>
-                  <label className="text-xs">Vigente desde<input type="date" value={draftPriceForm.valido_desde} onChange={(e) => setDraftPriceForm((p) => ({ ...p, valido_desde: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" /></label>
-                  <label className="text-xs">Vigente hasta<input type="date" value={draftPriceForm.valido_hasta} onChange={(e) => setDraftPriceForm((p) => ({ ...p, valido_hasta: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" /></label>
+                  <label className="text-xs">Moneda<select value={draftPriceForm.moneda_id} onChange={(e) => setDraftPriceForm((p) => ({ ...p, moneda_id: e.target.value }))} className="mt-1 ui-input"><option value="">Moneda...</option>{lookups.monedas.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}</select></label>
+                  <label className="text-xs">Periodo<select value={draftPriceForm.periodo} onChange={(e) => setDraftPriceForm((p) => ({ ...p, periodo: e.target.value }))} className="mt-1 ui-input"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option></select></label>
+                  <label className="text-xs">Valor<input type="number" value={draftPriceForm.valor} onChange={(e) => setDraftPriceForm((p) => ({ ...p, valor: e.target.value }))} className="mt-1 ui-input" /></label>
+                  <label className="text-xs">Vigente desde<input type="date" value={draftPriceForm.valido_desde} onChange={(e) => setDraftPriceForm((p) => ({ ...p, valido_desde: e.target.value }))} className="mt-1 ui-input" /></label>
+                  <label className="text-xs">Vigente hasta<input type="date" value={draftPriceForm.valido_hasta} onChange={(e) => setDraftPriceForm((p) => ({ ...p, valido_hasta: e.target.value }))} className="mt-1 ui-input" /></label>
                 </div>
-                <button onClick={pushDraftPrice} className="mt-2 rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar precio inicial</button>
-                <ul className="mt-2 space-y-1 text-xs">{draftPrices.map((dp, idx) => <li key={`${dp.moneda_id}-${dp.periodo}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{monedaName(dp.moneda_id)} | {dp.periodo} | {formatMoney(dp.valor)} | {formatDateOnly(dp.valido_desde)} - {formatDateOnly(dp.valido_hasta)}</span><button onClick={() => setDraftPrices((prev) => prev.filter((_, i) => i !== idx))} className="rounded bg-rose-700 px-2 py-0.5 text-white">Quitar</button></li>)}</ul>
+                <button onClick={pushDraftPrice} className="mt-2 ui-btn ui-btn-primary ui-btn-sm">Agregar precio inicial</button>
+                <ul className="mt-2 space-y-1 text-xs">{draftPrices.map((dp, idx) => <li key={`${dp.moneda_id}-${dp.periodo}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{monedaName(dp.moneda_id)} | {dp.periodo} | {formatMoney(dp.valor)} | {formatDateOnly(dp.valido_desde)} - {formatDateOnly(dp.valido_hasta)}</span><button onClick={() => setDraftPrices((prev) => prev.filter((_, i) => i !== idx))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
 
                 <div className="mt-4 border-t border-slate-200 pt-3">
                   <p className="text-xs font-semibold">Entitlements iniciales (opcional)</p>
                   <div className="mt-2 grid gap-2 md:grid-cols-3">
-                    <label className="text-xs">Entitlement<select value={manageEntitlementForm.entitlement_id} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, entitlement_id: e.target.value, valor_booleano: "", valor_entero: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="">Entitlement...</option>{lookups.entitlements.map((e) => <option key={e.value} value={e.value}>{e.label}</option>)}</select></label>
-                    <label className="text-xs">Valor entero<input type="number" value={manageEntitlementForm.valor_entero} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_entero: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" disabled={entitlementType(manageEntitlementForm.entitlement_id) === "BOOLEANO"} /></label>
-                    <label className="text-xs">Valor booleano<select value={manageEntitlementForm.valor_booleano} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_booleano: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" disabled={entitlementType(manageEntitlementForm.entitlement_id) !== "BOOLEANO"}><option value="">Sin definir</option><option value="true">Si</option><option value="false">No</option></select></label>
+                    <label className="text-xs">Entitlement<select value={manageEntitlementForm.entitlement_id} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, entitlement_id: e.target.value, valor_booleano: "", valor_entero: "" }))} className="mt-1 ui-input"><option value="">Entitlement...</option>{lookups.entitlements.map((e) => <option key={e.value} value={e.value}>{e.label}</option>)}</select></label>
+                    <label className="text-xs">Valor entero<input type="number" value={manageEntitlementForm.valor_entero} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_entero: e.target.value }))} className="mt-1 ui-input" disabled={entitlementType(manageEntitlementForm.entitlement_id) === "BOOLEANO"} /></label>
+                    <label className="text-xs">Valor booleano<select value={manageEntitlementForm.valor_booleano} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_booleano: e.target.value }))} className="mt-1 ui-input" disabled={entitlementType(manageEntitlementForm.entitlement_id) !== "BOOLEANO"}><option value="">Sin definir</option><option value="true">Si</option><option value="false">No</option></select></label>
                   </div>
-                  <button onClick={pushDraftEntitlement} className="mt-2 rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar entitlement</button>
-                  <ul className="mt-2 space-y-1 text-xs">{draftEntitlements.map((de, idx) => <li key={`${de.entitlement_id}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{entitlementName(de.entitlement_id)} | valor: {de.valor_entero || de.valor_booleano || "-"}</span><button onClick={() => setDraftEntitlements((prev) => prev.filter((_, i) => i !== idx))} className="rounded bg-rose-700 px-2 py-0.5 text-white">Quitar</button></li>)}</ul>
+                  <button onClick={pushDraftEntitlement} className="mt-2 ui-btn ui-btn-primary ui-btn-sm">Agregar entitlement</button>
+                  <ul className="mt-2 space-y-1 text-xs">{draftEntitlements.map((de, idx) => <li key={`${de.entitlement_id}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{entitlementName(de.entitlement_id)} | valor: {de.valor_entero || de.valor_booleano || "-"}</span><button onClick={() => setDraftEntitlements((prev) => prev.filter((_, i) => i !== idx))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
                 </div>
               </div>
             )}
 
-            <div className="mt-3 flex justify-end gap-2"><button onClick={() => setModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button><button onClick={savePlan} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Guardar</button></div>
+            <div className="mt-3 flex justify-end gap-2"><button onClick={() => setModal(false)} className="ui-btn ui-btn-outline">Cancelar</button><button onClick={savePlan} className="ui-btn ui-btn-primary">Guardar</button></div>
       </AppModal>
 
       <AppModal
@@ -681,14 +681,14 @@ export default function PlanesPage() {
         title="Agregar producto al plan"
       >
             <div className="mt-3 flex gap-2">
-              <select value={manageNewItemProduct} onChange={(e) => setManageNewItemProduct(e.target.value)} className="w-full rounded border border-slate-300 px-2 py-1.5 text-xs">
+              <select value={manageNewItemProduct} onChange={(e) => setManageNewItemProduct(e.target.value)} className="ui-input">
                 <option value="">Seleccionar producto...</option>
                 {lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
               </select>
-              <button onClick={addProductToPlan} className="rounded bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white">Agregar</button>
+              <button onClick={addProductToPlan} className="ui-btn ui-btn-primary ui-btn-sm">Agregar</button>
             </div>
             <div className="mt-3 flex justify-end">
-              <button onClick={() => setManageProductsModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cerrar</button>
+              <button onClick={() => setManageProductsModal(false)} className="ui-btn ui-btn-outline">Cerrar</button>
             </div>
       </AppModal>
 
@@ -699,15 +699,15 @@ export default function PlanesPage() {
         title="Agregar precio al plan"
       >
             <div className="mt-3 grid gap-2 md:grid-cols-2">
-              <label className="text-xs">Moneda<select value={managePriceForm.moneda_id} onChange={(e) => setManagePriceForm((p) => ({ ...p, moneda_id: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="">Moneda...</option>{lookups.monedas.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}</select></label>
-              <label className="text-xs">Periodo<select value={managePriceForm.periodo} onChange={(e) => setManagePriceForm((p) => ({ ...p, periodo: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option></select></label>
-              <label className="text-xs">Valor<input type="number" value={managePriceForm.valor} onChange={(e) => setManagePriceForm((p) => ({ ...p, valor: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" /></label>
-              <label className="text-xs">Vigente desde<input type="date" value={managePriceForm.valido_desde} onChange={(e) => setManagePriceForm((p) => ({ ...p, valido_desde: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" /></label>
-              <label className="text-xs">Vigente hasta<input type="date" value={managePriceForm.valido_hasta} onChange={(e) => setManagePriceForm((p) => ({ ...p, valido_hasta: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" /></label>
+              <label className="text-xs">Moneda<select value={managePriceForm.moneda_id} onChange={(e) => setManagePriceForm((p) => ({ ...p, moneda_id: e.target.value }))} className="mt-1 ui-input"><option value="">Moneda...</option>{lookups.monedas.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}</select></label>
+              <label className="text-xs">Periodo<select value={managePriceForm.periodo} onChange={(e) => setManagePriceForm((p) => ({ ...p, periodo: e.target.value }))} className="mt-1 ui-input"><option value="MENSUAL">MENSUAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="ANUAL">ANUAL</option></select></label>
+              <label className="text-xs">Valor<input type="number" value={managePriceForm.valor} onChange={(e) => setManagePriceForm((p) => ({ ...p, valor: e.target.value }))} className="mt-1 ui-input" /></label>
+              <label className="text-xs">Vigente desde<input type="date" value={managePriceForm.valido_desde} onChange={(e) => setManagePriceForm((p) => ({ ...p, valido_desde: e.target.value }))} className="mt-1 ui-input" /></label>
+              <label className="text-xs">Vigente hasta<input type="date" value={managePriceForm.valido_hasta} onChange={(e) => setManagePriceForm((p) => ({ ...p, valido_hasta: e.target.value }))} className="mt-1 ui-input" /></label>
             </div>
             <div className="mt-3 flex justify-end gap-2">
-              <button onClick={() => setManagePricesModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-              <button onClick={addPrice} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Agregar precio</button>
+              <button onClick={() => setManagePricesModal(false)} className="ui-btn ui-btn-outline">Cancelar</button>
+              <button onClick={addPrice} className="ui-btn ui-btn-primary">Agregar precio</button>
             </div>
       </AppModal>
 
@@ -718,13 +718,13 @@ export default function PlanesPage() {
         title="Agregar entitlement al plan"
       >
             <div className="mt-3 grid gap-2 md:grid-cols-3">
-              <label className="text-xs">Entitlement<select value={manageEntitlementForm.entitlement_id} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, entitlement_id: e.target.value, valor_booleano: "", valor_entero: "" }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs"><option value="">Entitlement...</option>{lookups.entitlements.map((e) => <option key={e.value} value={e.value}>{e.label}</option>)}</select></label>
-              <label className="text-xs">Valor entero<input type="number" value={manageEntitlementForm.valor_entero} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_entero: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" disabled={entitlementType(manageEntitlementForm.entitlement_id) === "BOOLEANO"} /></label>
-              <label className="text-xs">Valor booleano<select value={manageEntitlementForm.valor_booleano} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_booleano: e.target.value }))} className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs" disabled={entitlementType(manageEntitlementForm.entitlement_id) !== "BOOLEANO"}><option value="">Sin definir</option><option value="true">Si</option><option value="false">No</option></select></label>
+              <label className="text-xs">Entitlement<select value={manageEntitlementForm.entitlement_id} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, entitlement_id: e.target.value, valor_booleano: "", valor_entero: "" }))} className="mt-1 ui-input"><option value="">Entitlement...</option>{lookups.entitlements.map((e) => <option key={e.value} value={e.value}>{e.label}</option>)}</select></label>
+              <label className="text-xs">Valor entero<input type="number" value={manageEntitlementForm.valor_entero} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_entero: e.target.value }))} className="mt-1 ui-input" disabled={entitlementType(manageEntitlementForm.entitlement_id) === "BOOLEANO"} /></label>
+              <label className="text-xs">Valor booleano<select value={manageEntitlementForm.valor_booleano} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_booleano: e.target.value }))} className="mt-1 ui-input" disabled={entitlementType(manageEntitlementForm.entitlement_id) !== "BOOLEANO"}><option value="">Sin definir</option><option value="true">Si</option><option value="false">No</option></select></label>
             </div>
             <div className="mt-3 flex justify-end gap-2">
-              <button onClick={() => setManageEntitlementsModal(false)} className="rounded border border-slate-300 px-3 py-2 text-sm">Cancelar</button>
-              <button onClick={addPlanEntitlement} className="rounded bg-[var(--color-primary)] px-3 py-2 text-sm text-white">Agregar entitlement</button>
+              <button onClick={() => setManageEntitlementsModal(false)} className="ui-btn ui-btn-outline">Cancelar</button>
+              <button onClick={addPlanEntitlement} className="ui-btn ui-btn-primary">Agregar entitlement</button>
             </div>
       </AppModal>
     </main>

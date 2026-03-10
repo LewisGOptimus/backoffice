@@ -34,14 +34,14 @@ export function DataTable<T>({
         className,
       )}
     >
-      <table className="min-w-full border-separate border-spacing-0 text-7xl">
+      <table className="min-w-full border-separate border-spacing-0 text-[11px] sm:text-[12px]">
         <thead className="sticky top-0 z-10 bg-gradient-to-r from-[var(--color-primary-500)] to-[var(--color-primary-600)]">
           <tr>
             {columns.map((c) => (
               <th
                 key={c.key}
                 className={cx(
-                  "px-3 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em] whitespace-nowrap text-white/95 first:rounded-tl-lg last:rounded-tr-lg",
+                  "px-2.5 py-2 text-left text-[10px] font-semibold uppercase tracking-[0.08em] whitespace-nowrap text-white/95 sm:px-3 sm:py-2.5 first:rounded-tl-lg last:rounded-tr-lg",
                   c.headerClassName,
                 )}
               >
@@ -55,7 +55,7 @@ export function DataTable<T>({
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-4 py-8 text-center text-xs font-medium text-[#64748B]"
+                className="px-3 py-6 text-center text-xs font-medium text-[#64748B] sm:px-4 sm:py-8"
               >
                 {emptyMessage}
               </td>
@@ -70,7 +70,7 @@ export function DataTable<T>({
                 <td
                   key={c.key}
                   className={cx(
-                    "px-3 py-2.5 align-middle text-[12px] leading-5 text-[#1E293B]",
+                    "px-2.5 py-2 align-middle text-[11px] leading-4 text-[#1E293B] sm:px-3 sm:py-2.5 sm:text-[12px] sm:leading-5",
                     c.cellClassName,
                   )}
                 >

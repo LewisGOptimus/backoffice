@@ -582,7 +582,7 @@ export default function SuscripcionesPage() {
   );
 
   return (
-    <main className="space-y-4">
+    <main className="main-stack">
       <PageHeaderCard title="Suscripciones" description="Aquí se gestionan las suscripciones">
         <button
           onClick={openCreate}
@@ -591,7 +591,7 @@ export default function SuscripcionesPage() {
           Nueva suscripcion
         </button>
       </PageHeaderCard>
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <section className="main-card">
         <DataTable<Row>
           className="max-h-[350px] overflow-auto rounded border border-slate-200"
           rows={rows}
@@ -645,7 +645,7 @@ export default function SuscripcionesPage() {
               key: "acciones",
               header: "Acciones",
               render: (r) => (
-                <div className="flex gap-1">
+                <div className="flex flex-wrap gap-1">
                   <button
                     onClick={() => setSelected(String((r as any).id))}
                     className="ui-btn ui-btn-outline ui-btn-sm"
@@ -654,7 +654,7 @@ export default function SuscripcionesPage() {
                   </button>
                   <button
                     onClick={() => openEdit(r)}
-                    className="ui-btn ui-btn-secondary ui-btn-sm"
+                    className="ui-btn ui-btn-primary ui-btn-sm"
                   >
                     Editar
                   </button>
@@ -671,7 +671,7 @@ export default function SuscripcionesPage() {
         />
       </section>
 
-      {selected && <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div className="flex items-center justify-between"><h3 className="font-semibold">Items de suscripcion</h3><button onClick={() => { setAutoInvoiceOnAddItem(true); setAddItemDiscount(EMPTY_DISCOUNT); setAddItemModalOpen(true); }} className="ui-btn ui-btn-primary ui-btn-sm">Agregar item</button></div><div className="max-h-64 overflow-auto rounded border border-slate-200"><table className="min-w-full text-xs"><thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left">Producto</th><th className="px-2 py-2 text-left">Precio</th><th className="px-2 py-2 text-left">Cantidad</th><th className="px-2 py-2 text-left">Pago</th><th className="px-2 py-2 text-left">Efectivo</th><th className="px-2 py-2 text-left">Estado</th><th className="px-2 py-2 text-left">Acciones</th></tr></thead><tbody>{selectedItems.map((it) => <tr key={String(it.id)} className="border-t border-slate-100"><td className="px-2 py-2">{productLabel(String(it.producto_id))}</td><td className="px-2 py-2">{it.precio_id ? priceLabel(String(it.precio_id)) : "-"}</td><td className="px-2 py-2">{String(it.cantidad)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_inicio)} - {formatDateOnly(it.fecha_fin)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_efectiva_inicio)} - {formatDateOnly(it.fecha_efectiva_fin)}</td><td className="px-2 py-2">{badge(String(it.estado))}</td><td className="px-2 py-2"><div className="flex gap-1"><button onClick={() => openEditItem(it)} className="ui-btn ui-btn-secondary ui-btn-sm">Editar</button><button onClick={() => finalizeItem(String(it.id))} className="ui-btn ui-btn-secondary ui-btn-sm">Finalizar</button><button onClick={() => removeItem(String(it.id))} className="ui-btn ui-btn-danger ui-btn-sm">Eliminar</button></div></td></tr>)}</tbody></table></div>
+      {selected && <section className="main-card main-stack"><div className="flex flex-wrap items-center justify-between gap-2"><h3 className="font-semibold">Items de suscripcion</h3><button onClick={() => { setAutoInvoiceOnAddItem(true); setAddItemDiscount(EMPTY_DISCOUNT); setAddItemModalOpen(true); }} className="ui-btn ui-btn-primary ui-btn-sm">Agregar item</button></div><div className="max-h-64 overflow-auto rounded border border-slate-200"><table className="min-w-full text-xs"><thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left">Producto</th><th className="px-2 py-2 text-left">Precio</th><th className="px-2 py-2 text-left">Cantidad</th><th className="px-2 py-2 text-left">Pago</th><th className="px-2 py-2 text-left">Efectivo</th><th className="px-2 py-2 text-left">Estado</th><th className="px-2 py-2 text-left">Acciones</th></tr></thead><tbody>{selectedItems.map((it) => <tr key={String(it.id)} className="border-t border-slate-100"><td className="px-2 py-2">{productLabel(String(it.producto_id))}</td><td className="px-2 py-2">{it.precio_id ? priceLabel(String(it.precio_id)) : "-"}</td><td className="px-2 py-2">{String(it.cantidad)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_inicio)} - {formatDateOnly(it.fecha_fin)}</td><td className="px-2 py-2">{formatDateOnly(it.fecha_efectiva_inicio)} - {formatDateOnly(it.fecha_efectiva_fin)}</td><td className="px-2 py-2">{badge(String(it.estado))}</td><td className="px-2 py-2"><div className="flex flex-wrap gap-1"><button onClick={() => openEditItem(it)} className="ui-btn ui-btn-primary ui-btn-sm">Editar</button><button onClick={() => finalizeItem(String(it.id))} className="ui-btn ui-btn-secondary ui-btn-sm">Finalizar</button><button onClick={() => removeItem(String(it.id))} className="ui-btn ui-btn-danger ui-btn-sm">Eliminar</button></div></td></tr>)}</tbody></table></div>
 
       <div className="rounded border border-slate-200 p-3">
         <h4 className="font-semibold text-slate-900">Entitlements vigentes</h4>
@@ -755,11 +755,11 @@ export default function SuscripcionesPage() {
                 <p className="text-xs font-semibold">Items manuales opcionales</p>
                 {renderGuidedItemBuilder("draft")}
                 <ul className="mt-2 space-y-1 text-xs">
-                  {draftItems.map((d, idx) => <li key={`${d.producto_id}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{productLabel(d.producto_id)} | precio {d.precio_id ? priceLabel(d.precio_id) : "-"} | cant {d.cantidad} | pago {d.fecha_inicio || form.fecha_inicio}</span><button onClick={() => setDraftItems((prev) => prev.filter((_, i) => i !== idx))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}
+                  {draftItems.map((d, idx) => <li key={`${d.producto_id}-${idx}`} className="flex flex-wrap items-center justify-between gap-2 rounded border border-slate-200 px-2 py-1"><span>{productLabel(d.producto_id)} | precio {d.precio_id ? priceLabel(d.precio_id) : "-"} | cant {d.cantidad} | pago {d.fecha_inicio || form.fecha_inicio}</span><button onClick={() => setDraftItems((prev) => prev.filter((_, i) => i !== idx))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}
                 </ul>
               </div>
             )}
-            <div className="mt-3 flex justify-end gap-2">
+            <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <button onClick={() => setModal(false)} className="ui-btn ui-btn-outline">Cancelar</button>
               <button onClick={save} className="ui-btn ui-btn-primary">Guardar</button>
             </div>
@@ -781,7 +781,7 @@ export default function SuscripcionesPage() {
           <label className="text-xs">Efectiva fin<input type="date" value={itemForm.fecha_efectiva_fin} onChange={(e) => setItemForm((p) => ({ ...p, fecha_efectiva_fin: e.target.value }))} className="mt-1 ui-input" /></label>
         </div>
         <p className="mt-2 text-xs text-slate-600">Para consumibles, el precio es obligatorio y debe estar vigente para la fecha de inicio.</p>
-        <div className="mt-3 flex justify-end gap-2">
+        <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <button onClick={() => setItemModalOpen(false)} className="ui-btn ui-btn-outline">Cancelar</button>
           <button onClick={saveItemEdit} className="ui-btn ui-btn-primary">Guardar cambios</button>
         </div>

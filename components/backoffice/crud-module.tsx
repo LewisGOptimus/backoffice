@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { fetchJson, isSuccess } from "@/lib/client/api";
 import { formatDateOnly, looksLikeDateField } from "@/lib/client/date-format";
 import { formatMoney, looksLikeMoneyField } from "@/lib/client/currency-format";
@@ -31,6 +31,8 @@ type Props = {
   fields: Field[];
   columns: Column[];
   initial: Record<string, string>;
+  hideModuleHeader?: boolean;
+  onCreateRef?: (openCreate: () => void) => void;
 };
 
 function formatCell(value: unknown, badge?: boolean, key?: string) {
@@ -43,13 +45,26 @@ function formatCell(value: unknown, badge?: boolean, key?: string) {
   return <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-700">{text}</span>;
 }
 
-export function CrudModule({ title, resource, fields, columns, initial }: Props) {
+export function CrudModule({
+  title,
+  resource,
+  fields,
+  columns,
+  initial,
+  hideModuleHeader = false,
+  onCreateRef,
+}: Props) {
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [form, setForm] = useState<Record<string, string>>(initial);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const initialRef = useRef(initial);
+
+  useEffect(() => {
+    initialRef.current = initial;
+  }, [initial]);
 
   const orderedRows = useMemo(() => [...rows], [rows]);
 
@@ -74,10 +89,10 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
         headerClassName: "text-white bg-[var(--color-primary)]",
         cellClassName: "",
         render: (row) => (
-          <div className="flex gap-1.5">
+          <div className="flex flex-wrap gap-1.5">
             <button
               onClick={() => openEdit(row)}
-              className="ui-btn ui-btn-secondary ui-btn-sm"
+              className="ui-btn ui-btn-primary ui-btn-sm"
             >
               Editar
             </button>
@@ -106,11 +121,15 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
     return () => clearTimeout(t);
   }, [refresh]);
 
-  const openCreate = () => {
+  const openCreate = useCallback(() => {
     setEditingId(null);
-    setForm(initial);
+    setForm(initialRef.current);
     setModalOpen(true);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (onCreateRef) onCreateRef(openCreate);
+  }, [onCreateRef, openCreate]);
 
   const openEdit = (row: Row) => {
     setEditingId(String(row.id));
@@ -171,11 +190,13 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
   };
 
   return (
-    <section className="space-y-3 rounded-2xl border border-slate-200 bg-white w-full p-4 shadow-sm">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-        <button onClick={openCreate} className="ui-btn ui-btn-primary ui-btn-sm">Nuevo</button>
-      </div>
+    <section className="main-card main-stack w-full">
+      {!hideModuleHeader ? (
+        <div className="main-section-header">
+          <h2 className="main-section-title">{title}</h2>
+          <button onClick={openCreate} className="ui-btn ui-btn-primary ui-btn-sm">Nuevo</button>
+        </div>
+      ) : null}
       <DataTable
         columns={tableColumns}
         rows={orderedRows}
@@ -191,7 +212,7 @@ export function CrudModule({ title, resource, fields, columns, initial }: Props)
         title={editingId ? `Editar ${title}` : `Nuevo ${title}`}
         description="Completa los campos y guarda los cambios para actualizar el registro."
         footer={(
-          <div className="flex justify-end gap-2">
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <button onClick={() => setModalOpen(false)} className="ui-btn ui-btn-outline">Cancelar</button>
             <button onClick={save} className="ui-btn ui-btn-primary">Guardar</button>
           </div>

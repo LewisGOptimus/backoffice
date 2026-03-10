@@ -58,7 +58,7 @@ export function AppModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/20 p-4 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/20 p-3 backdrop-blur-md sm:items-center sm:p-4"
       onClick={() => closeOnBackdrop && onClose()}
     >
       <div
@@ -66,21 +66,21 @@ export function AppModal({
         aria-modal="true"
         aria-labelledby={titleId}
         className={cx(
-          `w-full ${maxWidthClassName} overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_24px_56px_rgba(15,23,42,0.18)]`,
+          `w-full ${maxWidthClassName} max-h-[92vh] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_24px_56px_rgba(15,23,42,0.18)]`,
           panelClassName,
         )}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="px-6 pb-6 pt-5">
+        <div className="px-4 pb-4 pt-4 sm:px-6 sm:pb-6 sm:pt-5">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3">
               {icon ? (
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500">
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500 sm:h-12 sm:w-12">
                   {icon}
                 </span>
               ) : null}
               <div>
-                <h3 id={titleId} className="text-[22px] leading-none text-slate-900">
+                <h3 id={titleId} className="text-lg leading-tight text-slate-900 sm:text-[22px] sm:leading-none">
                   {title}
                 </h3>
                 {description ? (
@@ -101,13 +101,13 @@ export function AppModal({
             ) : null}
           </div>
 
-          <div className="mt-4 h-px w-full bg-slate-200" />
+          <div className="mt-3 h-px w-full bg-slate-200 sm:mt-4" />
 
-          <div className={cx("mt-4 max-h-[52vh] overflow-auto pr-1", bodyClassName)}>
+          <div className={cx("mt-3 max-h-[60vh] overflow-auto pr-1 sm:mt-4 sm:max-h-[52vh]", bodyClassName)}>
             {children}
           </div>
 
-          {footer ? <div className="mt-5">{footer}</div> : null}
+          {footer ? <div className="mt-4 sm:mt-5">{footer}</div> : null}
         </div>
       </div>
     </div>

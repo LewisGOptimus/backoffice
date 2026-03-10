@@ -459,7 +459,7 @@ export default function PlanesPage() {
   }, [planes, itemsPlan, preciosProductos, precios]);
 
   return (
-    <main className="space-y-4">
+    <main className="main-stack">
       <PageHeaderCard title="Planes">
         <button
           onClick={openCreate}
@@ -469,7 +469,7 @@ export default function PlanesPage() {
         </button>
       </PageHeaderCard>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <section className="main-card">
         <DataTable<Row>
           className="max-h-[340px] overflow-auto rounded border border-slate-200"
           rows={planes}
@@ -522,7 +522,7 @@ export default function PlanesPage() {
               key: "__actions",
               header: "Acciones",
               render: (row) => (
-                <div className="flex gap-1">
+                <div className="flex flex-wrap gap-1">
                   <button
                     onClick={() => setSelectedPlan(String((row as any).id))}
                     className="ui-btn ui-btn-outline ui-btn-sm"
@@ -531,7 +531,7 @@ export default function PlanesPage() {
                   </button>
                   <button
                     onClick={() => openEdit(row as any)}
-                    className="ui-btn ui-btn-secondary ui-btn-sm"
+                    className="ui-btn ui-btn-primary ui-btn-sm"
                   >
                     Editar
                   </button>
@@ -549,17 +549,17 @@ export default function PlanesPage() {
       </section>
 
       {selectedPlan && (
-        <section className="grid gap-4 xl:grid-cols-3">
-          <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between">
+        <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+          <article className="main-card">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="font-semibold text-slate-900">Productos del plan</h3>
               <button onClick={() => setManageProductsModal(true)} className="ui-btn ui-btn-primary ui-btn-sm">Agregar producto</button>
             </div>
-            <ul className="mt-3 space-y-2 text-xs">{itemsSelected.map((x) => <li key={`${String(x.plan_id)}-${String(x.producto_id)}`} className="flex items-center justify-between rounded border border-slate-200 p-2"><span>{productName(String(x.producto_id))}</span><button onClick={() => removeProductFromPlan(String(x.plan_id), String(x.producto_id))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
+            <ul className="mt-3 space-y-2 text-xs">{itemsSelected.map((x) => <li key={`${String(x.plan_id)}-${String(x.producto_id)}`} className="flex flex-wrap items-center justify-between gap-2 rounded border border-slate-200 p-2"><span>{productName(String(x.producto_id))}</span><button onClick={() => removeProductFromPlan(String(x.plan_id), String(x.producto_id))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
           </article>
 
-          <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between">
+          <article className="main-card">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="font-semibold text-slate-900">Precios del plan</h3>
               <button onClick={() => setManagePricesModal(true)} className="ui-btn ui-btn-primary ui-btn-sm">Agregar precio</button>
             </div>
@@ -568,7 +568,7 @@ export default function PlanesPage() {
                 <li key={String(pr.id)} className="rounded border border-slate-200 p-2">
                   <p>{monedaName(String(pr.moneda_id))} | {String(pr.periodo)} | {formatMoney(pr.valor)} | desde {formatDateOnly(pr.valido_desde)} hasta {formatDateOnly(pr.valido_hasta)}</p>
                   <p className="mt-1"><span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 font-semibold">{String(pr.activo)}</span></p>
-                  <div className="mt-2 flex gap-2">
+                  <div className="mt-2 flex flex-wrap gap-2">
                     <button onClick={() => invalidatePrice(String(pr.id))} className="ui-btn ui-btn-secondary ui-btn-sm">Invalidar hoy</button>
                     <button onClick={() => deletePrice(String(pr.id))} className="ui-btn ui-btn-danger ui-btn-sm">Eliminar</button>
                   </div>
@@ -577,14 +577,14 @@ export default function PlanesPage() {
             </ul>
           </article>
 
-          <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between">
+          <article className="main-card">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="font-semibold text-slate-900">Entitlements del plan</h3>
               <button onClick={() => setManageEntitlementsModal(true)} className="ui-btn ui-btn-primary ui-btn-sm">Agregar entitlement</button>
             </div>
             <ul className="mt-3 space-y-2 text-xs">
               {entitlementsSelected.map((ep) => (
-                <li key={`${ep.plan_id}-${ep.entitlement_id}`} className="flex items-center justify-between rounded border border-slate-200 p-2">
+                <li key={`${ep.plan_id}-${ep.entitlement_id}`} className="flex flex-wrap items-center justify-between gap-2 rounded border border-slate-200 p-2">
                   <span>
                     {entitlementName(ep.entitlement_id)} | valor: {ep.valor_entero ?? String(ep.valor_booleano ?? "-")}
                   </span>
@@ -612,7 +612,7 @@ export default function PlanesPage() {
       >
 
             {!editing && (
-              <div className="mt-2 flex gap-2">
+              <div className="mt-2 flex flex-wrap gap-2">
                 <button onClick={() => setStep(1)} className={`rounded px-3 py-1.5 text-xs ${step === 1 ? "bg-[var(--color-primary)] text-white" : "border border-slate-300"}`}>Paso 1: Plan + productos</button>
                 <button onClick={() => {
                   if (draftProducts.length === 0) {
@@ -639,8 +639,8 @@ export default function PlanesPage() {
                 {!editing && (
                   <div className="mt-3 rounded border border-slate-200 p-3">
                     <p className="text-xs font-semibold">Productos obligatorios (minimo 1)</p>
-                    <div className="mt-2 flex gap-2"><select value={draftNewItemProduct} onChange={(e) => setDraftNewItemProduct(e.target.value)} className="ui-input"><option value="">Producto...</option>{lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}</select><button onClick={() => { if (draftNewItemProduct && !draftProducts.includes(draftNewItemProduct)) setDraftProducts((prev) => [...prev, draftNewItemProduct]); }} className="ui-btn ui-btn-primary ui-btn-sm">Agregar</button></div>
-                    <ul className="mt-2 space-y-1 text-xs">{draftProducts.map((p) => <li key={p} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{productName(p)}</span><button onClick={() => setDraftProducts((prev) => prev.filter((x) => x !== p))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
+                    <div className="mt-2 flex flex-col gap-2 sm:flex-row"><select value={draftNewItemProduct} onChange={(e) => setDraftNewItemProduct(e.target.value)} className="ui-input"><option value="">Producto...</option>{lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}</select><button onClick={() => { if (draftNewItemProduct && !draftProducts.includes(draftNewItemProduct)) setDraftProducts((prev) => [...prev, draftNewItemProduct]); }} className="ui-btn ui-btn-primary ui-btn-sm">Agregar</button></div>
+                    <ul className="mt-2 space-y-1 text-xs">{draftProducts.map((p) => <li key={p} className="flex flex-wrap items-center justify-between gap-2 rounded border border-slate-200 px-2 py-1"><span>{productName(p)}</span><button onClick={() => setDraftProducts((prev) => prev.filter((x) => x !== p))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
                   </div>
                 )}
               </>
@@ -657,7 +657,7 @@ export default function PlanesPage() {
                   <label className="text-xs">Vigente hasta<input type="date" value={draftPriceForm.valido_hasta} onChange={(e) => setDraftPriceForm((p) => ({ ...p, valido_hasta: e.target.value }))} className="mt-1 ui-input" /></label>
                 </div>
                 <button onClick={pushDraftPrice} className="mt-2 ui-btn ui-btn-primary ui-btn-sm">Agregar precio inicial</button>
-                <ul className="mt-2 space-y-1 text-xs">{draftPrices.map((dp, idx) => <li key={`${dp.moneda_id}-${dp.periodo}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{monedaName(dp.moneda_id)} | {dp.periodo} | {formatMoney(dp.valor)} | {formatDateOnly(dp.valido_desde)} - {formatDateOnly(dp.valido_hasta)}</span><button onClick={() => setDraftPrices((prev) => prev.filter((_, i) => i !== idx))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
+                <ul className="mt-2 space-y-1 text-xs">{draftPrices.map((dp, idx) => <li key={`${dp.moneda_id}-${dp.periodo}-${idx}`} className="flex flex-wrap items-center justify-between gap-2 rounded border border-slate-200 px-2 py-1"><span>{monedaName(dp.moneda_id)} | {dp.periodo} | {formatMoney(dp.valor)} | {formatDateOnly(dp.valido_desde)} - {formatDateOnly(dp.valido_hasta)}</span><button onClick={() => setDraftPrices((prev) => prev.filter((_, i) => i !== idx))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
 
                 <div className="mt-4 border-t border-slate-200 pt-3">
                   <p className="text-xs font-semibold">Entitlements iniciales (opcional)</p>
@@ -667,12 +667,12 @@ export default function PlanesPage() {
                     <label className="text-xs">Valor booleano<select value={manageEntitlementForm.valor_booleano} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_booleano: e.target.value }))} className="mt-1 ui-input" disabled={entitlementType(manageEntitlementForm.entitlement_id) !== "BOOLEANO"}><option value="">Sin definir</option><option value="true">Si</option><option value="false">No</option></select></label>
                   </div>
                   <button onClick={pushDraftEntitlement} className="mt-2 ui-btn ui-btn-primary ui-btn-sm">Agregar entitlement</button>
-                  <ul className="mt-2 space-y-1 text-xs">{draftEntitlements.map((de, idx) => <li key={`${de.entitlement_id}-${idx}`} className="flex items-center justify-between rounded border border-slate-200 px-2 py-1"><span>{entitlementName(de.entitlement_id)} | valor: {de.valor_entero || de.valor_booleano || "-"}</span><button onClick={() => setDraftEntitlements((prev) => prev.filter((_, i) => i !== idx))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
+                  <ul className="mt-2 space-y-1 text-xs">{draftEntitlements.map((de, idx) => <li key={`${de.entitlement_id}-${idx}`} className="flex flex-wrap items-center justify-between gap-2 rounded border border-slate-200 px-2 py-1"><span>{entitlementName(de.entitlement_id)} | valor: {de.valor_entero || de.valor_booleano || "-"}</span><button onClick={() => setDraftEntitlements((prev) => prev.filter((_, i) => i !== idx))} className="ui-btn ui-btn-danger ui-btn-sm">Quitar</button></li>)}</ul>
                 </div>
               </div>
             )}
 
-            <div className="mt-3 flex justify-end gap-2"><button onClick={() => setModal(false)} className="ui-btn ui-btn-outline">Cancelar</button><button onClick={savePlan} className="ui-btn ui-btn-primary">Guardar</button></div>
+            <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button onClick={() => setModal(false)} className="ui-btn ui-btn-outline">Cancelar</button><button onClick={savePlan} className="ui-btn ui-btn-primary">Guardar</button></div>
       </AppModal>
 
       <AppModal
@@ -680,7 +680,7 @@ export default function PlanesPage() {
         onClose={() => setManageProductsModal(false)}
         title="Agregar producto al plan"
       >
-            <div className="mt-3 flex gap-2">
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
               <select value={manageNewItemProduct} onChange={(e) => setManageNewItemProduct(e.target.value)} className="ui-input">
                 <option value="">Seleccionar producto...</option>
                 {lookups.productos.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
@@ -705,7 +705,7 @@ export default function PlanesPage() {
               <label className="text-xs">Vigente desde<input type="date" value={managePriceForm.valido_desde} onChange={(e) => setManagePriceForm((p) => ({ ...p, valido_desde: e.target.value }))} className="mt-1 ui-input" /></label>
               <label className="text-xs">Vigente hasta<input type="date" value={managePriceForm.valido_hasta} onChange={(e) => setManagePriceForm((p) => ({ ...p, valido_hasta: e.target.value }))} className="mt-1 ui-input" /></label>
             </div>
-            <div className="mt-3 flex justify-end gap-2">
+            <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <button onClick={() => setManagePricesModal(false)} className="ui-btn ui-btn-outline">Cancelar</button>
               <button onClick={addPrice} className="ui-btn ui-btn-primary">Agregar precio</button>
             </div>
@@ -722,7 +722,7 @@ export default function PlanesPage() {
               <label className="text-xs">Valor entero<input type="number" value={manageEntitlementForm.valor_entero} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_entero: e.target.value }))} className="mt-1 ui-input" disabled={entitlementType(manageEntitlementForm.entitlement_id) === "BOOLEANO"} /></label>
               <label className="text-xs">Valor booleano<select value={manageEntitlementForm.valor_booleano} onChange={(e) => setManageEntitlementForm((p) => ({ ...p, valor_booleano: e.target.value }))} className="mt-1 ui-input" disabled={entitlementType(manageEntitlementForm.entitlement_id) !== "BOOLEANO"}><option value="">Sin definir</option><option value="true">Si</option><option value="false">No</option></select></label>
             </div>
-            <div className="mt-3 flex justify-end gap-2">
+            <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <button onClick={() => setManageEntitlementsModal(false)} className="ui-btn ui-btn-outline">Cancelar</button>
               <button onClick={addPlanEntitlement} className="ui-btn ui-btn-primary">Agregar entitlement</button>
             </div>

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppState } from "@/lib/client/app-state";
 
 function Dot({ state }: { state: "checking" | "ok" | "down" }) {
@@ -122,6 +122,26 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { health } = useAppState();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onPointerDown = (event: MouseEvent) => {
+      if (!userMenuRef.current) return;
+      if (!userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsUserMenuOpen(false);
+    };
+    window.addEventListener("mousedown", onPointerDown);
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("mousedown", onPointerDown);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#F5F7FB]">
@@ -146,26 +166,70 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
               alt="Zoe Nube"
               width={100}
               height={40}
-              className="h-10 w-auto"
+              className="h-8 w-auto sm:h-10"
               priority
             />
-            <span className="text-lg font-bold tracking-tight text-[#007bff]">BACKOFFICE</span>
+            <span className="hidden text-lg font-bold tracking-tight text-[#007bff] sm:inline">BACKOFFICE</span>
           </Link>
 
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-3 py-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2563EB]/10">
-              <span className="text-xs font-semibold text-[#2563EB]">U</span>
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B]">Welcome</p>
-              <p className="text-sm font-medium text-[#1E293B]">Admin</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-xs text-[#64748B]">
+         
+          <div className="hidden items-center gap-2 text-xs text-[#64748B] sm:flex">
             <Dot state={health.api} /> API
             <Dot state={health.db} /> DB
+          </div>
+          <div ref={userMenuRef} className="relative">
+            <button
+              type="button"
+              className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-2 hover:bg-[#F8FAFC] sm:px-3"
+              aria-expanded={isUserMenuOpen}
+              aria-haspopup="menu"
+              onClick={() => setIsUserMenuOpen((open) => !open)}
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2563EB]/10">
+                <span className="text-xs font-semibold text-[#2563EB]">U</span>
+              </div>
+              <div className="hidden sm:block text-left">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B]">Welcome</p>
+                <p className="text-sm font-medium text-[#1E293B]">Admin</p>
+              </div>
+              <svg
+                className={`h-4 w-4 text-slate-500 transition-transform ${isUserMenuOpen ? "rotate-180" : ""}`}
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+            {isUserMenuOpen ? (
+              <div
+                className="absolute right-0 top-[calc(100%+0.4rem)] z-50 w-44 rounded-xl border border-[#E2E8F0] bg-white p-1.5 shadow-(--shadow-soft)"
+                role="menu"
+              >
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="block w-full rounded-lg px-3 py-2 text-left text-sm text-[#1E293B] hover:bg-[#F1F5F9]"
+                  onClick={() => setIsUserMenuOpen(false)}
+                >
+                  Configuración
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="block w-full rounded-lg px-3 py-2 text-left text-sm text-[#1E293B] hover:bg-[#F1F5F9]"
+                  onClick={() => setIsUserMenuOpen(false)}
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </header>
@@ -259,7 +323,9 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
         {/* Main content - container with padding, rounded, shadow */}
         <main className="min-w-0 flex-1  pt-4 md:pl-60 md:pt-6">
           <div className="mx-auto w-full  px-4 pb-8 md:px-6">
-            <div className="rounded-[20px] bg-white p-6 shadow-(--shadow-soft)">{children}</div>
+            <div className="main-shell">
+              <div className="main-shell-content">{children}</div>
+            </div>
           </div>
         </main>
       </div>

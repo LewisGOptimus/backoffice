@@ -47,8 +47,11 @@ export default function EntitlementsPage() {
   }, [empresaId]);
 
   return (
-    <main className="space-y-4">
-      <PageHeaderCard title="Entitlements por empresa">
+    <main className="main-stack">
+      <PageHeaderCard
+        title="Entitlements por empresa"
+        description="Consulta los entitlements vigentes por empresa."
+      >
         <label className="mt-2 block text-xs text-slate-700">
           Empresa
           <select
@@ -73,7 +76,7 @@ export default function EntitlementsPage() {
         </label>
       </PageHeaderCard>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <section className="main-card">
         <DataTable<EntRow>
           className="max-h-[620px] overflow-auto rounded border border-slate-200"
           rows={rows}

@@ -216,7 +216,7 @@ export default function EmpresasPage() {
   };
 
   return (
-    <main className="space-y-4">
+    <main className="main-stack">
       <PageHeaderCard
         title="Empresas"
         description="Empresas de la aplicación."
@@ -233,9 +233,9 @@ export default function EmpresasPage() {
           return (
             <article
               key={c.empresa_id}
-              className="w-full max-w-[360px] rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:border-slate-300 hover:shadow-md"
+              className="w-full rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:border-slate-300 hover:shadow-md"
             >
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex min-w-0 items-start gap-3">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-sm font-semibold text-slate-700">
                     {c.empresa_nombre.slice(0, 1).toUpperCase()}
@@ -289,22 +289,22 @@ export default function EmpresasPage() {
                 </div>
               </div>
 
-              <div className="mt-5 grid grid-cols-3 gap-2 border-t border-slate-100 pt-4">
+              <div className="mt-5 grid grid-cols-1 gap-2 border-t border-slate-100 pt-4 sm:grid-cols-3">
                 <button
                   onClick={() => openEdit(c.empresa_id)}
-                  className="rounded-2xl border border-slate-200 bg-white px-3 py-2 text-[11px] font-medium text-slate-700 transition hover:bg-slate-50"
+                  className="ui-btn ui-btn-primary ui-btn-sm w-full"
                 >
                   Editar
                 </button>
                 <button
                   onClick={() => remove(c.empresa_id)}
-                  className="rounded-2xl border border-slate-200 bg-white px-3 py-2 text-[11px] font-medium text-slate-700 transition hover:bg-slate-50"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 text-[11px] font-medium text-slate-700 transition hover:bg-slate-50"
                 >
                   Eliminar
                 </button>
                 <button
                   onClick={() => void togglePool(c.empresa_id)}
-                  className={`rounded-2xl border px-3 py-2 text-[11px] font-semibold transition ${
+                  className={`w-full rounded-2xl border px-3 py-2 text-[11px] font-semibold transition ${
                     openPoolEmpresaId === c.empresa_id
                       ? "border-slate-300 bg-slate-100 text-slate-900"
                       : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
@@ -380,7 +380,7 @@ export default function EmpresasPage() {
           </svg>
         )}
         footer={(
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <button
               onClick={() => setModal(false)}
               className="h-11 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-600 transition hover:bg-slate-50"

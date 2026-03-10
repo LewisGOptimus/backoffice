@@ -196,21 +196,21 @@ export function BillingOperationsHome() {
   };
 
   return (
-    <main className="space-y-4">
+    <main className="main-stack">
       <PageHeaderCard
         title="Operaciones de Billing"
         description="Cola operativa, alertas y acciones con preview obligatorio."
       />
 
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        <article className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-xs text-slate-500">Renovaciones 30d</p><p className="text-2xl font-semibold">{dashboard?.kpis.renewals_next_30_days ?? 0}</p></article>
-        <article className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-xs text-slate-500">Suscripciones vencidas</p><p className="text-2xl font-semibold">{dashboard?.kpis.overdue_subscriptions ?? 0}</p></article>
-        <article className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-xs text-slate-500">Facturas emitidas sin pago</p><p className="text-2xl font-semibold">{dashboard?.kpis.unpaid_invoices ?? 0}</p></article>
+        <article className="main-card-subtle"><p className="text-xs text-slate-500">Renovaciones 30d</p><p className="text-2xl font-semibold">{dashboard?.kpis.renewals_next_30_days ?? 0}</p></article>
+        <article className="main-card-subtle"><p className="text-xs text-slate-500">Suscripciones vencidas</p><p className="text-2xl font-semibold">{dashboard?.kpis.overdue_subscriptions ?? 0}</p></article>
+        <article className="main-card-subtle"><p className="text-xs text-slate-500">Facturas emitidas sin pago</p><p className="text-2xl font-semibold">{dashboard?.kpis.unpaid_invoices ?? 0}</p></article>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1.3fr_1fr]">
-        <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="mb-3 flex items-center justify-between"><h3 className="font-semibold text-slate-900">Bandeja operacional</h3><button onClick={runAlertsJob} disabled={loading} className="ui-btn ui-btn-primary ui-btn-sm">Ejecutar batch alertas</button></div>
+        <article className="main-card">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2"><h3 className="font-semibold text-slate-900">Bandeja operacional</h3><button onClick={runAlertsJob} disabled={loading} className="ui-btn ui-btn-primary ui-btn-sm">Ejecutar batch alertas</button></div>
           <div className="max-h-[420px] overflow-auto rounded border border-slate-200">
             <table className="min-w-full text-xs">
               <thead className="bg-slate-50"><tr><th className="px-2 py-2 text-left">Tipo</th><th className="px-2 py-2 text-left">Severidad</th><th className="px-2 py-2 text-left">Estado</th><th className="px-2 py-2 text-left">Acciones</th></tr></thead>
@@ -221,7 +221,7 @@ export function BillingOperationsHome() {
                     <td className="px-2 py-2">{a.severity}</td>
                     <td className="px-2 py-2">{a.status}</td>
                     <td className="px-2 py-2">
-                      <div className="flex gap-1">
+                      <div className="flex flex-wrap gap-1">
                         <Link href={`/clientes/${a.empresa_id}`} className="ui-btn ui-btn-outline ui-btn-sm">Cliente</Link>
                         <button onClick={() => markAlert(a.id, "in_progress")} className="ui-btn ui-btn-secondary ui-btn-sm">Tomar</button>
                         <button onClick={() => markAlert(a.id, "resolved")} className="ui-btn ui-btn-secondary ui-btn-sm">Resolver</button>
@@ -234,7 +234,7 @@ export function BillingOperationsHome() {
           </div>
         </article>
 
-        <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+        <article className="main-card">
           <h3 className="font-semibold text-slate-900">Busqueda de clientes</h3>
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Nombre, NIT o email" className="mt-2 ui-input" />
           <div className="mt-3 max-h-[340px] space-y-2 overflow-auto">
@@ -246,11 +246,11 @@ export function BillingOperationsHome() {
               </Link>
             ))}
           </div>
-          <div className="mt-3 flex gap-2"><Link href="/clientes" className="ui-btn ui-btn-outline ui-btn-sm">Ver clientes</Link><Link href="/precios" className="ui-btn ui-btn-outline ui-btn-sm">Price Book</Link></div>
+          <div className="mt-3 flex flex-wrap gap-2"><Link href="/clientes" className="ui-btn ui-btn-outline ui-btn-sm">Ver clientes</Link><Link href="/precios" className="ui-btn ui-btn-outline ui-btn-sm">Price Book</Link></div>
         </article>
       </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <section className="main-card">
         <h3 className="font-semibold text-slate-900">Acciones (Preview {"->"} Confirmar)</h3>
         <div className="mt-2 grid gap-2 md:grid-cols-2">
           <label className="text-xs">Accion<select value={action} onChange={(e) => { const next = e.target.value as BillingAction; setAction(next); setPayload({ ...(ACTION_OPTIONS.find((x) => x.id === next)?.template ?? {}) }); setPreview(null); setResult(""); }} className="mt-1 ui-input">{ACTION_OPTIONS.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}</select></label>
@@ -277,7 +277,7 @@ export function BillingOperationsHome() {
             </label>
           ))}
         </div>
-        <div className="mt-3 flex gap-2">
+        <div className="mt-3 flex flex-col gap-2 sm:flex-row">
           <button onClick={runPreview} disabled={loading} className="ui-btn ui-btn-primary">1) Preview</button>
           <button onClick={runExecute} disabled={loading || !preview} className="ui-btn ui-btn-secondary">2) Confirmar</button>
         </div>

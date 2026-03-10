@@ -362,7 +362,7 @@ export default function ProductosPage() {
   };
 
   return (
-    <main className="space-y-4">
+    <main className="main-stack">
       <PageHeaderCard
         title="Productos"
         description="Productos de la aplicación."
@@ -371,7 +371,7 @@ export default function ProductosPage() {
       </PageHeaderCard>
 
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <section className="main-card">
         <DataTable<ProductoRow>
           className="max-h-[360px] overflow-auto rounded border border-slate-200"
           rows={productos}
@@ -424,7 +424,7 @@ export default function ProductosPage() {
               key: "__actions",
               header: "Acciones",
               render: (row) => (
-                <div className="flex gap-1">
+                <div className="flex flex-wrap gap-1">
                   <button
                     onClick={() => setSelectedProductId(row.id)}
                     className="ui-btn ui-btn-outline ui-btn-sm"
@@ -433,7 +433,7 @@ export default function ProductosPage() {
                   </button>
                   <button
                     onClick={() => openEdit(row)}
-                    className="ui-btn ui-btn-secondary ui-btn-sm"
+                    className="ui-btn ui-btn-primary ui-btn-sm"
                   >
                     Editar
                   </button>
@@ -452,7 +452,7 @@ export default function ProductosPage() {
 
       {productoSeleccionado && (
         <section className="grid gap-4 xl:grid-cols-2">
-          <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <article className="main-card">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-slate-900">Detalle operativo</h3>
               <Badge text={productoSeleccionado.tipo} />
@@ -461,7 +461,7 @@ export default function ProductosPage() {
               <div className="mt-3 rounded border border-slate-200 bg-slate-50 p-3">
                 <p className="text-xs font-semibold text-slate-800">Perfil consumible</p>
                 <p className="mt-1 text-xs text-slate-700">Este producto representa un pool de creditos consumibles.</p>
-                <div className="mt-2 flex items-center gap-2">
+                <div className="mt-2 flex flex-wrap items-center gap-2">
                   <span className="text-xs text-slate-600">Unidad:</span>
                   <Badge text={productoSeleccionado.unidad_consumo ?? "SIN UNIDAD"} />
                 </div>
@@ -470,10 +470,10 @@ export default function ProductosPage() {
             )}
           </article>
 
-          <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between">
+          <article className="main-card">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="font-semibold text-slate-900">Precios del producto</h3>
-              <div className="flex gap-1 items-center">
+              <div className="flex flex-wrap items-center gap-1">
                 <Badge text={productoSeleccionado.tipo} />
                 {productoSeleccionado.tipo === "SERVICIO" && <Badge text="PRORRATEO CONFIGURABLE" />}
                 <button onClick={() => setManagePricesModalOpen(true)} className="ui-btn ui-btn-primary ui-btn-sm">Agregar precio</button>
@@ -489,7 +489,7 @@ export default function ProductosPage() {
                     <Badge text={pr.activo ? "ACTIVO" : "INACTIVO"} />
                     <Badge text={pr.permite_prorrateo ? "PRORRATEA" : "SIN PRORRATEO"} />
                   </div>
-                  <div className="mt-2 flex gap-2">
+                  <div className="mt-2 flex flex-wrap gap-2">
                     <button onClick={() => invalidatePrice(pr.id)} className="ui-btn ui-btn-secondary ui-btn-sm">Invalidar hoy</button>
                     <button onClick={() => deletePrice(pr.id)} className="ui-btn ui-btn-danger ui-btn-sm">Eliminar</button>
                   </div>
@@ -573,7 +573,7 @@ export default function ProductosPage() {
               </div>
             )}
 
-            <div className="mt-3 flex justify-end gap-2">
+            <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <button onClick={() => setModalOpen(false)} className="ui-btn ui-btn-outline">Cancelar</button>
               <button onClick={saveProduct} className="ui-btn ui-btn-primary">Guardar</button>
             </div>
@@ -594,7 +594,7 @@ export default function ProductosPage() {
               <label className="text-xs">Vigente desde<input type="date" value={priceForm.valido_desde} onChange={(e) => setPriceForm((p) => ({ ...p, valido_desde: e.target.value }))} className="mt-1 ui-input" /></label>
               <label className="text-xs">Vigente hasta<input type="date" value={priceForm.valido_hasta} onChange={(e) => setPriceForm((p) => ({ ...p, valido_hasta: e.target.value }))} className="mt-1 ui-input" /></label>
             </div>
-            <div className="mt-3 flex justify-end gap-2">
+            <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <button onClick={() => setManagePricesModalOpen(false)} className="ui-btn ui-btn-outline">Cancelar</button>
               <button onClick={addPrice} className="ui-btn ui-btn-primary">Agregar precio</button>
             </div>

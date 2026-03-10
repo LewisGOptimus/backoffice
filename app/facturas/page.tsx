@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CrudModule } from "@/components/backoffice/crud-module";
 import { fetchJson, isSuccess } from "@/lib/client/api";
 import toast from "react-hot-toast";
@@ -13,6 +13,10 @@ type Lookups = {
 
 export default function FacturasPage() {
   const [lookups, setLookups] = useState<Lookups>({ empresas: [], suscripciones: [] });
+  const [openCreate, setOpenCreate] = useState<(() => void) | null>(null);
+  const handleCreateRef = useCallback((fn: () => void) => {
+    setOpenCreate(() => fn);
+  }, []);
 
   useEffect(() => {
     const t = setTimeout(async () => {
@@ -30,12 +34,22 @@ export default function FacturasPage() {
 
   return (
     <>
-    <div className="space-y-4">
-    <PageHeaderCard title="Facturas" description="Aquí se gestionan las facturas"/>
+    <div className="main-stack">
+    <PageHeaderCard title="Facturas" description="Aquí se gestionan las facturas">
+      <button
+        onClick={() => openCreate?.()}
+        className="ui-btn ui-btn-primary ui-btn-sm"
+        disabled={!openCreate}
+      >
+        Nuevo
+      </button>
+    </PageHeaderCard>
      
     <CrudModule
       title="Facturas"
       resource="facturas"
+      hideModuleHeader
+      onCreateRef={handleCreateRef}
       fields={[
         { key: "empresa_id", label: "Empresa", type: "select", options: lookups.empresas },
         { key: "suscripcion_id", label: "Suscripcion", type: "select", options: lookups.suscripciones },

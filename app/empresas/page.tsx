@@ -96,9 +96,6 @@ export default function EmpresasPage() {
   const [poolByEmpresa, setPoolByEmpresa] = useState<Record<string, ConsumablePoolRow[]>>({});
   const [poolLoadingEmpresaId, setPoolLoadingEmpresaId] = useState<string | null>(null);
   const [openPoolEmpresaId, setOpenPoolEmpresaId] = useState<string | null>(null);
-  const formLabelClass = "text-[14px] text-slate-600";
-  const formFieldClass =
-    "mt-2 w-full  border border-slate-200 bg-white px-3 py-2.5 text-[14px] text-slate-900 outline-none transition focus:border-[var(--color-primary-400)] focus:ring-2 focus:ring-[var(--color-primary-100)]";
 
   const mapError = (code: "VALIDATION_ERROR" | "NOT_FOUND" | "CONFLICT" | "BUSINESS_RULE_VIOLATION" | "INTERNAL_ERROR" | "UNAUTHORIZED", message: string) =>
     toHumanConsumableError(message) ?? toHumanError(code, message);
@@ -369,78 +366,54 @@ export default function EmpresasPage() {
       <AppModal
         open={modal}
         onClose={() => setModal(false)}
-        maxWidthClassName="max-w-xl"
+        maxWidthClassName="max-w-3xl"
         title={editing ? "Editar empresa" : "Nueva empresa"}
-        description="Configura los datos principales y el usuario responsable."
-        icon={(
-          <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8" aria-hidden="true">
-            <rect x="5" y="7" width="14" height="12" rx="2" />
-            <path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7" />
-            <circle cx="16.5" cy="10.5" r="1.5" />
-          </svg>
-        )}
-        footer={(
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <button
-              onClick={() => setModal(false)}
-              className="h-11 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-600 transition hover:bg-slate-50"
-            >
-              Cancelar
-            </button>
-            <button
-              onClick={save}
-              className="h-11 rounded-xl bg-[var(--color-primary)] px-4 text-base text-white shadow-[0_10px_18px_rgba(0,123,255,0.3)] transition hover:bg-[var(--color-primary-700)]"
-            >
-              {editing ? "Guardar" : "Crear"}
-            </button>
-          </div>
-        )}
       >
-        <div className="grid gap-3 md:grid-cols-2">
-          <label className={formLabelClass}>
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          <label className="text-xs">
             Nombre
             <input
               value={form.nombre}
               onChange={(e) => setForm((p) => ({ ...p, nombre: e.target.value }))}
-              className={formFieldClass}
+              className="mt-1 ui-input"
               placeholder="Nombre de la empresa"
             />
           </label>
-          <label className={formLabelClass}>
+          <label className="text-xs">
             NIT
             <input
               value={form.nit}
               onChange={(e) => setForm((p) => ({ ...p, nit: e.target.value }))}
-              className={formFieldClass}
+              className="mt-1 ui-input"
               placeholder="Identificacion tributaria"
             />
           </label>
-          <label className={formLabelClass}>
+          <label className="text-xs">
             Timezone
             <input
               value={form.timezone}
               onChange={(e) => setForm((p) => ({ ...p, timezone: e.target.value }))}
-              className={formFieldClass}
+              className="mt-1 ui-input"
               placeholder="UTC"
             />
           </label>
-          <label className={formLabelClass}>
+          <label className="text-xs">
             Estado
             <select
               value={form.activa}
               onChange={(e) => setForm((p) => ({ ...p, activa: e.target.value }))}
-              className={formFieldClass}
+              className="mt-1 ui-input"
             >
               <option value="true">Activa</option>
               <option value="false">Inactiva</option>
             </select>
           </label>
-          <label className={`${formLabelClass} md:col-span-2`}>
+          <label className="text-xs md:col-span-2">
             Usuario dueno (obligatorio)
             <select
               value={form.owner_user_id}
               onChange={(e) => setForm((p) => ({ ...p, owner_user_id: e.target.value }))}
-              className={formFieldClass}
+              className="mt-1 ui-input"
             >
               <option value="">Seleccionar...</option>
               {usuarios.map((u) => (
@@ -450,6 +423,10 @@ export default function EmpresasPage() {
               ))}
             </select>
           </label>
+        </div>
+        <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button onClick={() => setModal(false)} className="ui-btn ui-btn-outline">Cancelar</button>
+          <button onClick={save} className="ui-btn ui-btn-primary">{editing ? "Guardar" : "Crear"}</button>
         </div>
       </AppModal>
     </main>

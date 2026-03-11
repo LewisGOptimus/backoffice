@@ -14,6 +14,10 @@ const body = Montserrat({
 export const metadata: Metadata = {
   title: "POC Planes",
   description: "Prueba de concepto visual e interactiva para planes y suscripciones",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    shortcut: ["/favicon.svg"],
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

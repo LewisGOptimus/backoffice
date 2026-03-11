@@ -48,6 +48,25 @@ type DraftPlanEntitlement = {
 const EMPTY_PRICE: DraftPrice = { moneda_id: "", periodo: "MENSUAL", valor: "0", valido_desde: "", valido_hasta: "" };
 const EMPTY_ENTITLEMENT_DRAFT: DraftPlanEntitlement = { entitlement_id: "", valor_entero: "", valor_booleano: "" };
 
+type BadgeVariant = "default" | "success" | "danger";
+
+function Badge({ text, variant = "default" }: { text: string; variant?: BadgeVariant }) {
+  const baseClasses = "inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold";
+  const variantClasses =
+    variant === "success"
+      ? "bg-emerald-100 text-emerald-700"
+      : variant === "danger"
+        ? "bg-red-100 text-red-700"
+        : "bg-slate-100 text-slate-700";
+  return <span className={`${baseClasses} ${variantClasses}`}>{text}</span>;
+}
+
+function isActivo(value: unknown): boolean {
+  if (typeof value === "boolean") return value;
+  if (value === "true" || value === true) return true;
+  return false;
+}
+
 export default function PlanesPage() {
   const [planes, setPlanes] = useState<Row[]>([]);
   const [itemsPlan, setItemsPlan] = useState<Row[]>([]);
@@ -512,11 +531,15 @@ export default function PlanesPage() {
             {
               key: "activo",
               header: "Estado",
-              render: (row) => (
-                <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 font-semibold">
-                  {String((row as any).activo)}
-                </span>
-              ),
+              render: (row) => {
+                const activo = isActivo((row as any).activo);
+                return (
+                  <Badge
+                    text={activo ? "ACTIVO" : "INACTIVO"}
+                    variant={activo ? "success" : "danger"}
+                  />
+                );
+              },
             },
             {
               key: "__actions",
@@ -567,7 +590,12 @@ export default function PlanesPage() {
               {preciosSelected.map((pr) => (
                 <li key={String(pr.id)} className="rounded border border-slate-200 p-2">
                   <p>{monedaName(String(pr.moneda_id))} | {String(pr.periodo)} | {formatMoney(pr.valor)} | desde {formatDateOnly(pr.valido_desde)} hasta {formatDateOnly(pr.valido_hasta)}</p>
-                  <p className="mt-1"><span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 font-semibold">{String(pr.activo)}</span></p>
+                  <p className="mt-1">
+                    <Badge
+                      text={isActivo(pr.activo) ? "ACTIVO" : "INACTIVO"}
+                      variant={isActivo(pr.activo) ? "success" : "danger"}
+                    />
+                  </p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     <button onClick={() => invalidatePrice(String(pr.id))} className="ui-btn ui-btn-secondary ui-btn-sm">Invalidar hoy</button>
                     <button onClick={() => deletePrice(String(pr.id))} className="ui-btn ui-btn-danger ui-btn-sm">Eliminar</button>

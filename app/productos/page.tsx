@@ -87,8 +87,18 @@ const EMPTY_PRICE_FORM: PriceForm = {
   valido_hasta: "",
 };
 
-function Badge({ text }: { text: string }) {
-  return <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-700">{text}</span>;
+type BadgeVariant = "default" | "success" | "danger";
+
+function Badge({ text, variant = "default" }: { text: string; variant?: BadgeVariant }) {
+  const baseClasses = "inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold";
+  const variantClasses =
+    variant === "success"
+      ? "bg-emerald-100 text-emerald-700"
+      : variant === "danger"
+        ? "bg-red-100 text-red-700"
+        : "bg-slate-100 text-slate-700";
+
+  return <span className={`${baseClasses} ${variantClasses}`}>{text}</span>;
 }
 
 function toDateStart(value?: string | null): Date {
@@ -414,11 +424,16 @@ export default function ProductosPage() {
               cellClassName: "text-slate-700",
               render: (row) => <Badge text={row.es_consumible ? "SI" : "NO"} />,
             },
-            {
+          {
               key: "activo",
               header: "Estado",
               cellClassName: "text-slate-700",
-              render: (row) => <Badge text={row.activo ? "ACTIVO" : "INACTIVO"} />,
+              render: (row) => (
+                <Badge
+                  text={row.activo ? "ACTIVO" : "INACTIVO"}
+                  variant={row.activo ? "success" : "danger"}
+                />
+              ),
             },
             {
               key: "__actions",
@@ -486,7 +501,10 @@ export default function ProductosPage() {
                 <li key={pr.id} className="rounded border border-slate-200 p-2">
                   <p>{monedaLabel(pr.moneda_id)} | {pr.periodo} | {formatMoney(pr.valor)} | {formatDateOnly(pr.valido_desde)} - {formatDateOnly(pr.valido_hasta)}</p>
                   <div className="mt-1 flex gap-1">
-                    <Badge text={pr.activo ? "ACTIVO" : "INACTIVO"} />
+                    <Badge
+                      text={pr.activo ? "ACTIVO" : "INACTIVO"}
+                      variant={pr.activo ? "success" : "danger"}
+                    />
                     <Badge text={pr.permite_prorrateo ? "PRORRATEA" : "SIN PRORRATEO"} />
                   </div>
                   <div className="mt-2 flex flex-wrap gap-2">

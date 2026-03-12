@@ -7,7 +7,12 @@ import { useEffect, useRef, useState } from "react";
 import { useAppState } from "@/lib/client/app-state";
 
 function Dot({ state }: { state: "checking" | "ok" | "down" }) {
-  const color = state === "ok" ? "bg-emerald-500" : state === "down" ? "bg-rose-500" : "bg-amber-400";
+  const color =
+    state === "ok"
+      ? "bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.15)]"
+      : state === "down"
+        ? "bg-rose-500 shadow-[0_0_0_4px_rgba(244,63,94,0.14)]"
+        : "bg-amber-400 shadow-[0_0_0_4px_rgba(251,191,36,0.14)]";
   return <span className={`inline-block h-2.5 w-2.5 rounded-full ${color}`} />;
 }
 
@@ -143,187 +148,193 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  return (
-    <div className="min-h-screen bg-[#F5F7FB]">
-      {/* Header topbar - 70px, white */}
-      <header className="sticky top-0 z-40 flex h-[70px] items-center justify-between border-b border-[#E2E8F0] bg-white px-4 md:px-6 shadow-(--shadow-soft)">
-        <div className="flex items-center gap-3 md:gap-4">
-          {/* Botón menú mobile */}
-          <button
-            type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#E2E8F0] bg-white text-[#1E293B] hover:bg-[#F1F5F9] md:hidden"
-            onClick={() => setIsMobileSidebarOpen((open) => !open)}
-            aria-label="Abrir menú"
-          >
-            <span className="sr-only">Toggle sidebar</span>
-            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h10" />
-            </svg>
-          </button>
-          <Link href="/backoffice" className="flex items-center gap-3">
-            <Image
-              src="/nubeLogo.png"
-              alt="Zoe Nube"
-              width={100}
-              height={40}
-              className="h-8 w-auto sm:h-10"
-              priority
-            />
-            <span className="hidden text-lg font-bold tracking-tight text-[#007bff] sm:inline">BACKOFFICE</span>
-          </Link>
+  const navItemClass = (active: boolean) =>
+    `group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
+      active
+        ? "bg-[linear-gradient(130deg,#007bff_0%,#1b66db_100%)] text-white shadow-[0_8px_20px_rgba(0,123,255,0.24)]"
+        : "text-[#475569] hover:bg-white hover:text-[#1E293B] hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)]"
+    }`;
 
-        </div>
-        <div className="flex items-center gap-3">
-         
-          <div className="hidden items-center gap-2 text-xs text-[#64748B] sm:flex">
-            <Dot state={health.api} /> API
-            <Dot state={health.db} /> DB
-          </div>
-          <div ref={userMenuRef} className="relative">
+  return (
+    <div className="relative min-h-screen overflow-hidden bg-[#F5F7FB]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_-10%,rgba(0,123,255,0.12),rgba(245,247,251,0)_68%)]" />
+      <div className="pointer-events-none absolute -left-28 top-20 h-72 w-72 rounded-full bg-[#007bff]/[0.08] blur-3xl" />
+      <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-[#60A5FA]/[0.12] blur-3xl" />
+
+      <header className="sticky top-0 z-40 border-b border-[#E2E8F0]/90 bg-white/90 backdrop-blur-md">
+        <div className="mx-auto flex h-[72px] w-full items-center justify-between px-4 md:px-6">
+          <div className="flex items-center gap-3 md:gap-4">
             <button
               type="button"
-              className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-2 hover:bg-[#F8FAFC] sm:px-3"
-              aria-expanded={isUserMenuOpen}
-              aria-haspopup="menu"
-              onClick={() => setIsUserMenuOpen((open) => !open)}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2E8F0] bg-white text-[#1E293B] shadow-[0_4px_14px_rgba(15,23,42,0.06)] transition-colors hover:bg-[#F1F5F9] md:hidden"
+              onClick={() => setIsMobileSidebarOpen((open) => !open)}
+              aria-label="Abrir menú"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2563EB]/10">
-                <span className="text-xs font-semibold text-[#2563EB]">U</span>
-              </div>
-              <div className="hidden sm:block text-left">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B]">Welcome</p>
-                <p className="text-sm font-medium text-[#1E293B]">Admin</p>
-              </div>
-              <svg
-                className={`h-4 w-4 text-slate-500 transition-transform ${isUserMenuOpen ? "rotate-180" : ""}`}
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                  clipRule="evenodd"
-                />
+              <span className="sr-only">Toggle sidebar</span>
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h10" />
               </svg>
             </button>
-            {isUserMenuOpen ? (
-              <div
-                className="absolute right-0 top-[calc(100%+0.4rem)] z-50 w-44 rounded-xl border border-[#E2E8F0] bg-white p-1.5 shadow-(--shadow-soft)"
-                role="menu"
-              >
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="block w-full rounded-lg px-3 py-2 text-left text-sm text-[#1E293B] hover:bg-[#F1F5F9]"
-                  onClick={() => setIsUserMenuOpen(false)}
-                >
-                  Configuración
-                </button>
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="block w-full rounded-lg px-3 py-2 text-left text-sm text-[#1E293B] hover:bg-[#F1F5F9]"
-                  onClick={() => setIsUserMenuOpen(false)}
-                >
-                  Cerrar sesión
-                </button>
+            <Link href="/backoffice" className="flex items-center gap-3">
+              <Image
+                src="/nubeLogo.png"
+                alt="Zoe Nube"
+                width={100}
+                height={40}
+                className="h-9 w-auto sm:h-10"
+                priority
+              />
+              <div className="hidden sm:block">
+                <span className="block text-base font-bold tracking-tight text-[#007bff]">BACKOFFICE</span>
+                <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-[#64748B]">
+                  Zoe Nube
+                </span>
               </div>
-            ) : null}
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="hidden items-center gap-2 rounded-full border border-[#DBEAFE] bg-[#EFF6FF] px-3 py-1.5 text-xs font-medium text-[#1E3A8A] sm:flex">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#475569]">Monitoreo</span>
+              <span className="inline-flex items-center gap-1.5"><Dot state={health.api} />API</span>
+              <span className="inline-flex items-center gap-1.5"><Dot state={health.db} />DB</span>
+            </div>
+
+            <div ref={userMenuRef} className="relative">
+              <button
+                type="button"
+                className="flex items-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-2.5 py-1.5 shadow-[0_6px_18px_rgba(15,23,42,0.06)] transition-colors hover:border-[#BFDBFE] hover:bg-[#F8FBFF] sm:px-3"
+                aria-expanded={isUserMenuOpen}
+                aria-haspopup="menu"
+                onClick={() => setIsUserMenuOpen((open) => !open)}
+              >
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2563EB]/10 ring-1 ring-[#93C5FD]/40">
+                  <span className="text-xs font-semibold text-[#2563EB]">U</span>
+                </div>
+                <div className="hidden text-left sm:block">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#64748B]">Operador</p>
+                  <p className="text-sm font-semibold text-[#1E293B]">Admin</p>
+                </div>
+                <svg
+                  className={`h-4 w-4 text-slate-500 transition-transform ${isUserMenuOpen ? "rotate-180" : ""}`}
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+
+              {isUserMenuOpen ? (
+                <div
+                  className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-48 rounded-2xl border border-[#E2E8F0] bg-white p-1.5 shadow-[0_14px_36px_rgba(15,23,42,0.12)]"
+                  role="menu"
+                >
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="block w-full rounded-lg px-3 py-2 text-left text-sm text-[#1E293B] transition-colors hover:bg-[#F1F5F9]"
+                    onClick={() => setIsUserMenuOpen(false)}
+                  >
+                    Configuración
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="block w-full rounded-lg px-3 py-2 text-left text-sm text-[#1E293B] transition-colors hover:bg-[#F1F5F9]"
+                    onClick={() => setIsUserMenuOpen(false)}
+                  >
+                    Cerrar sesión
+                  </button>
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
       </header>
 
-      <div className="flex flex-col md:flex-row">
-        {/* Sidebar mobile como drawer */}
+      <div className="relative z-10 flex flex-col md:flex-row">
         {isMobileSidebarOpen && (
-          <div
-            className="fixed inset-0 z-30 bg-black/40 md:hidden"
-            onClick={() => setIsMobileSidebarOpen(false)}
-          >
+          <div className="fixed inset-0 z-30 bg-slate-900/45 backdrop-blur-[1px] md:hidden" onClick={() => setIsMobileSidebarOpen(false)}>
             <aside
-              className="absolute left-0 top-[70px] h-[calc(100vh-70px)] w-64 bg-white shadow-xl"
+              className="absolute left-0 top-[72px] h-[calc(100vh-72px)] w-72 border-r border-[#D9E5F6] bg-[linear-gradient(180deg,#F8FBFF_0%,#F3F7FC_45%,#F7F9FE_100%)] shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <nav className="flex flex-col gap-1 p-4">
-                {SIDEBAR_SECTIONS.map((section) => (
-                  <div key={section.title} className="pt-4 first:pt-0">
-                    <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-[#64748B]">
-                      {section.title}
-                    </p>
-                    <div className="space-y-0.5">
-                      {section.items.map((item) => {
-                        const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                        return (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            className={`flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-sm transition-colors ${
-                              active
-                                ? "bg-[#007bff] text-white"
-                                : "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#1E293B]"
-                            }`}
-                            onClick={() => setIsMobileSidebarOpen(false)}
-                          >
-                            <NavIcon icon={item.icon} />
-                            <span className="flex-1">{item.label}</span>
-                            {item.badge != null && item.badge > 0 && (
-                              <span className="rounded-full bg-[#2563EB] px-2 py-0.5 text-[10px] font-semibold text-white">
-                                {item.badge}
-                              </span>
-                            )}
-                          </Link>
-                        );
-                      })}
+              <div className="flex h-full flex-col">
+                <nav className="flex-1 overflow-y-auto px-4 py-5">
+                  {SIDEBAR_SECTIONS.map((section) => (
+                    <div key={section.title} className="pt-4 first:pt-0">
+                      <p className="mb-2 px-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#64748B]">
+                        {section.title}
+                      </p>
+                      <div className="space-y-1">
+                        {section.items.map((item) => {
+                          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                          return (
+                            <Link
+                              key={item.href}
+                              href={item.href}
+                              className={navItemClass(active)}
+                              onClick={() => setIsMobileSidebarOpen(false)}
+                            >
+                              <NavIcon icon={item.icon} />
+                              <span className="flex-1">{item.label}</span>
+                              {item.badge != null && item.badge > 0 ? (
+                                <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-semibold text-inherit">
+                                  {item.badge}
+                                </span>
+                              ) : null}
+                            </Link>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </nav>
+                  ))}
+                </nav>
+
+              </div>
             </aside>
           </div>
         )}
 
-        {/* Sidebar desktop fija a la izquierda */}
-        <aside className="hidden md:block md:fixed md:left-0 md:top-[70px] md:z-30 md:h-[calc(100vh-70px)] md:w-60 md:shrink-0 md:border-r md:border-[#E2E8F0] md:bg-white">
-          <nav className="flex flex-col gap-1 p-4">
-            {SIDEBAR_SECTIONS.map((section) => (
-              <div key={section.title} className="pt-4 first:pt-0">
-                <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-[#64748B]">
-                  {section.title}
-                </p>
-                <div className="space-y-0.5">
-                  {section.items.map((item) => {
-                    const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className={`flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-sm transition-colors ${
-                          active
-                            ? "bg-[#007bff] text-white"
-                            : "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#1E293B]"
-                        }`}
-                      >
-                        <NavIcon icon={item.icon} />
-                        <span className="flex-1">{item.label}</span>
-                        {item.badge != null && item.badge > 0 && (
-                          <span className="rounded-full bg-[#2563EB] px-2 py-0.5 text-[10px] font-semibold text-white">
-                            {item.badge}
-                          </span>
-                        )}
-                      </Link>
-                    );
-                  })}
+        <aside className="hidden md:fixed md:left-0 md:top-[72px] md:z-30 md:h-[calc(100vh-72px)] md:w-[17rem] md:border-r md:border-[#D9E5F6] md:bg-[linear-gradient(180deg,#F8FBFF_0%,#F3F7FC_45%,#F7F9FE_100%)] md:block">
+          <div className="flex h-full flex-col">
+            <nav className="flex-1 overflow-y-auto px-4 py-5">
+              {SIDEBAR_SECTIONS.map((section) => (
+                <div key={section.title} className="pt-4 first:pt-0">
+                  <p className="mb-2 px-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#64748B]">
+                    {section.title}
+                  </p>
+                  <div className="space-y-1">
+                    {section.items.map((item) => {
+                      const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                      return (
+                        <Link key={item.href} href={item.href} className={navItemClass(active)}>
+                          <NavIcon icon={item.icon} />
+                          <span className="flex-1">{item.label}</span>
+                          {item.badge != null && item.badge > 0 ? (
+                            <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-semibold text-inherit">
+                              {item.badge}
+                            </span>
+                          ) : null}
+                        </Link>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </nav>
+              ))}
+            </nav>
+
+          </div>
         </aside>
 
-        {/* Main content - container with padding, rounded, shadow */}
-        <main className="min-w-0 flex-1  pt-4 md:pl-60 md:pt-6">
-          <div className="mx-auto w-full  px-4 pb-8 md:px-6">
-            <div className="main-shell">
+        <main className="min-w-0 flex-1 pt-4 md:pl-[17rem] md:pt-6">
+          <div className="mx-auto w-full px-4 pb-8 md:px-6 xl:px-8">
+            <div className="main-shell shadow-none">
               <div className="main-shell-content">{children}</div>
             </div>
           </div>

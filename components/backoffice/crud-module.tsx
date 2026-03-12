@@ -190,7 +190,7 @@ export function CrudModule({
   };
 
   return (
-    <section className="main-card main-stack w-full">
+    <section className="main-card main-stack w-full shadow-none">
       {!hideModuleHeader ? (
         <div className="main-section-header">
           <h2 className="main-section-title">{title}</h2>

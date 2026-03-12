@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 type AppModalProps = {
   open: boolean;
@@ -55,10 +56,11 @@ export function AppModal({
   }, [closeOnEscape, onClose, open]);
 
   if (!open) return null;
+  if (typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/20 p-3 backdrop-blur-md sm:items-center sm:p-4"
+      className="fixed inset-0 z-[120] flex items-end justify-center bg-slate-900/30 p-3 backdrop-blur-md sm:items-center sm:p-4"
       onClick={() => closeOnBackdrop && onClose()}
     >
       <div
@@ -110,6 +112,7 @@ export function AppModal({
           {footer ? <div className="mt-4 sm:mt-5">{footer}</div> : null}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
